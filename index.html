@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, shrink-to-fit=no" />
+    <title>Macaron Ledger</title>
+    <meta name="description" content="A sweet, simple expense tracker. Private, offline, and every category is a macaron." />
+    <meta name="theme-color" content="#FFF9F2" />
+    <meta name="color-scheme" content="light" />
+    <!-- Installable as a home-screen app -->
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Macaron" />
+    <meta property="og:title" content="Macaron Ledger" />
+    <meta property="og:description" content="A sweet, simple expense tracker. Private, offline, and every category is a macaron." />
+    <meta property="og:image" content="icons/og-image.png" />
+    <style id="expo-reset">
+      html, body { height: 100%; background: #FFF9F2; }
+      body { overflow: hidden; margin: 0; -webkit-font-smoothing: antialiased; }
+      #root { display: flex; height: 100%; flex: 1; }
+      /* Center the app like a phone on wide screens */
+      @media (min-width: 720px) {
+        body { background: #FBF3E4; }
+        #root { max-width: 480px; margin: 0 auto; box-shadow: 0 0 0 1px #EFE4D6, 0 24px 60px rgba(138, 94, 66, 0.12); background: #FFF9F2; }
+      }
+      input, textarea { font-family: inherit; }
+      input:focus { outline: none; }
+    </style>
+  <meta name="theme-color" content="#FFF9F2">
+<link rel="icon" href="/macaron-ledger/favicon.ico"/></head>
+  <body>
+    <noscript>Macaron Ledger needs JavaScript to run.</noscript>
+    <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator && location.protocol === 'https:') {
+        addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+      }
+    </script>
+  <script src="/macaron-ledger/_expo/static/js/web/index-fbb900db315252fe8f5a6b07e551d1a7.js" defer></script>
+</body>
+</html>
