@@ -10,7 +10,10 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const req = event.request;
-  if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
+  const url = new URL(req.url);
+  if (req.method !== 'GET' || url.origin !== self.location.origin) return;
+  // The stock radar under /stock/ updates its data daily: always go to the network.
+  if (url.pathname.includes('/stock/')) return;
   const isShell = req.mode === 'navigate' || req.url.endsWith('/') || req.url.endsWith('index.html');
   event.respondWith(isShell ? networkFirst(req) : cacheFirst(req));
 });

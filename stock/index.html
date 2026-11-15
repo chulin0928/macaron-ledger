@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>台股盤後雷達</title>
+<meta name="description" content="每日自動更新：營收＋季線＋外資選股、PTT 恐懼貪婪指數、三大法人與融資籌碼、法說會閃避詞分析。">
+<meta name="theme-color" content="#f3f1ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11151c" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2311151c'/%3E%3Cpath d='M5 22l6-7 5 4 9-10' stroke='%23e0484f' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <div>
+        <h1>台股盤後雷達</h1>
+        <p class="sub" id="meta-line">載入中…</p>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="功能">
+      <a href="#screener" role="tab" data-tab="screener">選股</a>
+      <a href="#sentiment" role="tab" data-tab="sentiment">PTT 情緒</a>
+      <a href="#chips" role="tab" data-tab="chips">籌碼</a>
+      <a href="#transcript" role="tab" data-tab="transcript">法說會</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="notice" class="notice" hidden></div>
+
+  <!-- ============ 選股 ============ -->
+  <section id="tab-screener" class="tab" hidden>
+    <div class="headline">
+      <div>
+        <h2>營收動能 × 季線 × 外資</h2>
+        <p class="lede" id="scr-lede">月營收年增率連續正成長、股價站上季線（60 日均線），可再疊加外資近五日買超。</p>
+      </div>
+      <div class="funnel" id="scr-funnel"></div>
+    </div>
+    <div class="controls">
+      <label class="chk"><input type="checkbox" id="f-rev" checked> 營收連 <b id="rev-n">3</b> 個月 YoY &gt; 0</label>
+      <label class="chk"><input type="checkbox" id="f-ma" checked> 站上季線</label>
+      <label class="chk"><input type="checkbox" id="f-fi"> 外資近五日買超</label>
+      <label class="num">20 日均量 ≥ <input type="number" id="f-vol" value="0" min="0" step="100" inputmode="numeric"> 張</label>
+      <input type="search" id="f-q" placeholder="搜尋代號、名稱、產業" aria-label="搜尋">
+    </div>
+    <div class="table-box">
+      <table class="grid" id="scr-table">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="foot-note" id="scr-note"></p>
+  </section>
+
+  <!-- ============ PTT 情緒 ============ -->
+  <section id="tab-sentiment" class="tab" hidden>
+    <div class="sent-top">
+      <div class="gauge-card" id="gauge"></div>
+      <div class="chart-card">
+        <div class="card-h"><h3>恐懼貪婪指數走勢</h3><span class="legend"><i class="lg-idx"></i>指數 <i class="lg-tx"></i>加權指數</span></div>
+        <div id="sent-chart" class="chart"></div>
+      </div>
+    </div>
+    <div class="cols3">
+      <div class="panel"><h3>貪婪詞</h3><div id="w-greed" class="words"></div></div>
+      <div class="panel"><h3>恐慌詞</h3><div id="w-fear" class="words"></div></div>
+      <div class="panel"><h3>熱門文章</h3><ol id="hot" class="hot"></ol></div>
+    </div>
+    <div class="panel">
+      <h3>今日被討論的個股</h3>
+      <div class="table-box"><table class="grid" id="ptt-stocks"><thead><tr><th>代號</th><th>名稱</th><th class="r">篇數</th><th class="r">推</th><th class="r">噓</th><th class="r">情緒</th><th>文章</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <details class="method">
+      <summary>指數怎麼算</summary>
+      <p>每天抓 PTT Stock 板當日所有文章與推文，用台股專屬詞庫打分：「歐印、睡飽數錢、飛向宇宙」等加貪婪分，「畢業、公園排隊、塊陶、丸子」等加恐慌分。文章本文的分數乘上推噓比權重（推多的文章算多、被噓爆的算少）。指數 = 貪婪分 ÷（貪婪分＋恐慌分）× 100，50 為中性。累積滿 20 天後，同時參考歷史百分位判斷極端值。</p>
+      <p>讀法是<b>反向</b>：極度貪婪通常是短線過熱，極度恐慌反而接近恐慌底部。</p>
+    </details>
+  </section>
+
+  <!-- ============ 籌碼 ============ -->
+  <section id="tab-chips" class="tab" hidden>
+    <div class="headline">
+      <div>
+        <h2>三大法人 × 融資</h2>
+        <p class="lede">近十個交易日買賣超與融資餘額變化。<span class="tag red">紅</span> 融資單日暴增 ≥<b id="red-pct">20</b>% 且外資同天賣超；<span class="tag warn">橘</span> 融資異常增加（高於過去 60 日平均 2 個標準差）且外資賣超。</p>
+      </div>
+    </div>
+    <div class="chip-layout">
+      <div class="chip-list" id="chip-list"></div>
+      <div class="chip-detail" id="chip-detail"></div>
+    </div>
+  </section>
+
+  <!-- ============ 法說會 ============ -->
+  <section id="tab-transcript" class="tab" hidden>
+    <div class="headline">
+      <div>
+        <h2>法說會閃避詞分析</h2>
+        <p class="lede">貼上同一家公司兩季的法說會逐字稿，比較閃避詞頻率、各主題回答長度，並列出分析師問了但管理層沒正面回答的問題。全部在你的瀏覽器裡計算，不會上傳。</p>
+      </div>
+    </div>
+    <div class="tx-inputs">
+      <div class="tx-col">
+        <div class="tx-h"><label for="tx-prev">上一季逐字稿</label><label class="file">讀取 .txt<input type="file" accept=".txt,text/plain" data-target="tx-prev"></label></div>
+        <textarea id="tx-prev" rows="10" placeholder="貼上上一季的逐字稿…"></textarea>
+      </div>
+      <div class="tx-col">
+        <div class="tx-h"><label for="tx-cur">本季逐字稿</label><label class="file">讀取 .txt<input type="file" accept=".txt,text/plain" data-target="tx-cur"></label></div>
+        <textarea id="tx-cur" rows="10" placeholder="貼上本季的逐字稿…"></textarea>
+      </div>
+    </div>
+    <details class="method">
+      <summary>調整詞庫</summary>
+      <div class="lex-grid">
+        <label>閃避詞（逗號分隔）<textarea id="lex-evasive" rows="3"></textarea></label>
+        <label>語氣詞<textarea id="lex-tone" rows="3"></textarea></label>
+        <label>主題<textarea id="lex-topic" rows="3"></textarea></label>
+      </div>
+    </details>
+    <div class="tx-actions">
+      <button id="tx-run" class="btn primary" type="button">分析</button>
+      <button id="tx-sample" class="btn" type="button">載入範例</button>
+      <span class="hint">問題段落判斷：以「Q／問／分析師」開頭或含問號的段落；其後到下一個問題前視為回答。</span>
+    </div>
+    <div id="tx-out"></div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p>資料來源：臺灣證券交易所、證券櫃檯買賣中心、公開資訊觀測站、PTT Stock 板。每個交易日晚上與早上自動更新。結果同步存到 Google 雲端硬碟。</p>
+  <p>本頁為個人研究工具，不構成投資建議。</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
