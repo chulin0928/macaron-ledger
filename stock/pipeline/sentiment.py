@@ -85,7 +85,27 @@ def crawl(days: list[date], today: date, max_pages: int = 400):
     return entries
 
 
-def summarize_day(d: date, entries: list[dict]):
+NOISE_TITLE = re.compile(r"閒聊|排行|ETF內扣|盤後|盤中")
+
+
+def mentioned_codes(title: str, names: dict) -> set[str]:
+    """Stocks a title is really about: a real code next to its name, a [標的] post,
+    or a distinctive (3+ character) company name. Dates like 1113 or years like 2026 are ignored."""
+    if NOISE_TITLE.search(title):
+        return set()
+    out = set()
+    for code in CODE_IN_TITLE.findall(title):
+        nm = names.get(code)
+        if nm and (title.startswith("[標的]") or nm.replace("-KY", "").replace("*", "") in title):
+            out.add(code)
+    for code, nm in names.items():
+        base = nm.replace("-KY", "").replace("*", "")
+        if len(base) >= 3 and base in title:
+            out.add(code)
+    return out
+
+
+def summarize_day(d: date, entries: list[dict], names: dict):
     G = F = 0.0
     cg, cf = Counter(), Counter()
     stocks: dict[str, dict] = {}
@@ -114,7 +134,7 @@ def summarize_day(d: date, entries: list[dict]):
             pg += x[0]; pf += x[1]; g1.update(x[2]); f1.update(x[3])
         G += g + pg; F += f + pf
         cg.update(g1); cf.update(f1)
-        for code in set(CODE_IN_TITLE.findall(title)):
+        for code in mentioned_codes(title, names):
             st = stocks.setdefault(code, {"n": 0, "G": 0.0, "F": 0.0, "push": 0, "boo": 0, "titles": []})
             st["n"] += 1; st["G"] += g + pg; st["F"] += f + pf; st["push"] += push; st["boo"] += boo
             if len(st["titles"]) < 3:
@@ -134,8 +154,9 @@ def summarize_day(d: date, entries: list[dict]):
     }
 
 
-def run(days_back: int = 1, today: date | None = None):
+def run(days_back: int = 1, today: date | None = None, names: dict | None = None):
     """Crawl today + `days_back` previous days. Returns list of day summaries (oldest first)."""
+    names = names or {}
     today = today or (datetime.utcnow() + timedelta(hours=8)).date()
     days = [today - timedelta(days=i) for i in range(days_back + 1)]
     entries = crawl(days, today)
@@ -144,5 +165,5 @@ def run(days_back: int = 1, today: date | None = None):
         es = [e for e in entries if e["d"] == d]
         if es:
             print(f"PTT {d}: {len(es)} articles", flush=True)
-            out.append(summarize_day(d, es))
+            out.append(summarize_day(d, es, names))
     return out

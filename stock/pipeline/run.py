@@ -16,6 +16,7 @@ from . import analysis, sentiment, sources as S, store
 from .store import DATA, load_json, save_json
 
 CONFIG = store.ROOT / "config.json"
+MIN_ARTICLES = 20
 EXPORT = DATA / "exports"
 
 
@@ -106,7 +107,7 @@ def fill_revenue_finmind(revenue, scr, months_needed, log):
 def update_sentiment(days_back, log):
     pdir = DATA / "ptt"
     try:
-        for summ in sentiment.run(days_back=days_back):
+        for summ in sentiment.run(days_back=days_back, names=load_json(DATA / "names.json", {})):
             save_json(pdir / f"{summ['date'].replace('-', '')}.json", summ)
     except Exception as e:  # noqa: BLE001
         log.append(f"PTT 抓取失敗: {e}")
@@ -114,6 +115,9 @@ def update_sentiment(days_back, log):
     for p in files[:-400]:
         p.unlink()
     series = [load_json(p) for p in sorted(pdir.glob("*.json"))]
+    for s in series:  # too few posts (e.g. just after midnight) gives a meaningless reading
+        if (s.get("articles") or 0) < MIN_ARTICLES:
+            s["index"] = None
     vals = [s["index"] for s in series if s.get("index") is not None]
     for s in series:
         x = s.get("index")
@@ -169,6 +173,8 @@ def main():
     series = (load_json(DATA / "sentiment.json", {}) or {}).get("series", [])
     if not args.skip_ptt:
         series = update_sentiment(args.ptt_days, log)
+    usable = [s for s in series if s.get("index") is not None]
+    latest_sent = usable[-1] if usable else (series[-1] if series else None)
 
     scr = analysis.screener(days, revenue, names, industry, cfg.get("revenue_months", 3))
     if not scr["complete"]:
@@ -180,8 +186,8 @@ def main():
     picks = [r["code"] for r in scr["rows"] if r["rev_ok"] and r["above_ma60"] and r["f5_buy"]]
     picks.sort(key=lambda c: -(next(r for r in scr["rows"] if r["code"] == c)["f5"] or 0))
     watch += [c for c in picks[: cfg.get("auto_from_screener", 10)] if c not in watch]
-    if series:
-        hot = [c for c in series[-1].get("stocks", {}) if c in days[-1]["s"]]
+    if latest_sent:
+        hot = [c for c in latest_sent.get("stocks", {}) if c in days[-1]["s"]]
         watch += [c for c in hot[: cfg.get("auto_from_ptt", 5)] if c not in watch]
     chip = {c: analysis.chips(days, c, names, cfg.get("red_margin_pct", 20)) for c in watch if c in days[-1]["s"]}
     sources_tag = {c: ("自選" if c in cfg.get("watchlist", []) else "選股" if c in picks else "PTT熱門") for c in chip}
@@ -190,7 +196,7 @@ def main():
 
     for s in series:
         s["zone"] = zone(s, cfg)
-    latest_sent = series[-1] if series else None
+
     partial = days[-1].get("partial", [])
     out = {
         "updated": tw_now().strftime("%Y-%m-%d %H:%M"),
