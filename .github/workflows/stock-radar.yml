@@ -1,0 +1,44 @@
+name: 台股盤後雷達 daily update
+
+on:
+  schedule:
+    - cron: "17 0 * * *"      # 08:17 台灣：PTT 早盤情緒、補齊前一晚的融資資料
+    - cron: "47 13 * * 1-5"   # 21:47 台灣：收盤價、三大法人、融資餘額都已公布
+  workflow_dispatch:
+    inputs:
+      backfill:
+        description: "確保至少有幾個交易日的歷史資料（第一次可填 130）"
+        default: "0"
+      ptt_days:
+        description: "重新抓 PTT 前幾天"
+        default: "1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stock-radar
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests lxml
+      - name: Fetch data and build dashboard JSON
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+        run: python -m stock.pipeline.run --backfill "${{ github.event.inputs.backfill || '0' }}" --ptt-days "${{ github.event.inputs.ptt_days || '1' }}"
+      - name: Commit updated data
+        run: |
+          git config user.name "stock-radar-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add stock/data
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          git commit -m "stock radar: data update $(TZ=Asia/Taipei date +'%Y-%m-%d %H:%M')"
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
