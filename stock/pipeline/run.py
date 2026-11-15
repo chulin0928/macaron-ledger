@@ -10,7 +10,7 @@ import csv
 import io
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from . import analysis, sentiment, sources as S, store
 from .store import DATA, load_json, save_json
@@ -21,7 +21,7 @@ EXPORT = DATA / "exports"
 
 
 def tw_now():
-    return datetime.utcnow() + timedelta(hours=8)
+    return datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(hours=8)
 
 
 def update_revenue(log):
@@ -208,6 +208,7 @@ def main():
         "sentiment": {"latest": latest_sent,
                       "series": [{k: s.get(k) for k in ("date", "index", "pct", "zone", "articles", "pushes", "G", "F")} for s in series[-180:]]},
         "chips": chip,
+        "chips_order": list(chip),
         "market": analysis.market(days),
     }
     save_json(DATA / "latest.json", out)

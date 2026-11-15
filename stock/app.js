@@ -190,14 +190,14 @@
   }
   function renderChips() {
     $('#red-pct').textContent = DATA.config?.red_margin_pct ?? 20;
-    const codes = Object.keys(DATA.chips);
+    const codes = DATA.chips_order || Object.keys(DATA.chips);
     CHIP.sel = store.get('chip', null);
     if (!codes.includes(CHIP.sel)) CHIP.sel = codes[0];
     $('#chip-list').addEventListener('click', (e) => { const b = e.target.closest('[data-code]'); if (b) { CHIP.sel = b.dataset.code; drawChips(); } });
     drawChips();
   }
   function drawChips() {
-    const chips = Object.values(DATA.chips);
+    const chips = (DATA.chips_order || Object.keys(DATA.chips)).map((c) => DATA.chips[c]).filter(Boolean);
     if (!chips.length) { $('#chip-detail').innerHTML = '<p class="empty">尚無籌碼資料</p>'; return; }
     store.set('chip', CHIP.sel);
     const flagOf = (c) => { const f = c.table.flatMap((t) => t.flags); return f.includes('red') ? 'red' : f.includes('warn') ? 'warn' : null; };

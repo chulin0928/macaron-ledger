@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import re
 from collections import Counter
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 from . import sources as S
 
@@ -157,7 +157,7 @@ def summarize_day(d: date, entries: list[dict], names: dict):
 def run(days_back: int = 1, today: date | None = None, names: dict | None = None):
     """Crawl today + `days_back` previous days. Returns list of day summaries (oldest first)."""
     names = names or {}
-    today = today or (datetime.utcnow() + timedelta(hours=8)).date()
+    today = today or (datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(hours=8)).date()
     days = [today - timedelta(days=i) for i in range(days_back + 1)]
     entries = crawl(days, today)
     out = []

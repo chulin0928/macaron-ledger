@@ -8,7 +8,7 @@ Institutional numbers are net buy (+) / sell (-) in 張; margin balance in 張.
 from __future__ import annotations
 
 import json
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from . import sources as S
@@ -111,7 +111,7 @@ def prune():
 def update_recent(lookback_calendar_days: int = 10, target_trading_days: int | None = None, today: date | None = None):
     """Fill in any missing / partial days. With target_trading_days, walk back until that many exist."""
     names = load_json(DATA / "names.json", {})
-    today = today or (datetime.utcnow() + timedelta(hours=8)).date()
+    today = today or (datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(hours=8)).date()
     d = today
     stop = today - timedelta(days=lookback_calendar_days)
     have = 0
@@ -124,6 +124,8 @@ def update_recent(lookback_calendar_days: int = 10, target_trading_days: int | N
         if d.weekday() < 5:
             st = fetch_day(d, names)
             print(d, st, flush=True)
+            if st in ("ok", "partial"):
+                save_json(DATA / "names.json", names)  # keep progress if the job is interrupted
             if st in ("ok", "partial"):
                 have += 1
             elif st == "error":
