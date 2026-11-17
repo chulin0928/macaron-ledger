@@ -26,6 +26,26 @@
     <button class="btn primary" type="submit">登入</button>
   </form>
 </div>
+<div id="pw-modal" class="modal" hidden>
+  <form id="pw-form" class="gate-card" role="dialog" aria-modal="true" aria-labelledby="pw-title">
+    <h2 id="pw-title">修改帳號密碼</h2>
+    <label for="pw-curuser">目前帳號</label>
+    <input id="pw-curuser" autocomplete="username" required>
+    <label for="pw-cur">目前密碼</label>
+    <input id="pw-cur" type="password" autocomplete="current-password" required>
+    <label for="pw-user">新帳號</label>
+    <input id="pw-user" autocomplete="username" required>
+    <label for="pw-new">新密碼</label>
+    <input id="pw-new" type="password" autocomplete="new-password" minlength="4" required>
+    <label for="pw-new2">再輸入一次新密碼</label>
+    <input id="pw-new2" type="password" autocomplete="new-password" minlength="4" required>
+    <p id="pw-msg" class="gate-err" hidden></p>
+    <div class="modal-actions">
+      <button type="button" class="btn" id="pw-cancel">取消</button>
+      <button type="submit" class="btn primary" id="pw-save">儲存</button>
+    </div>
+  </form>
+</div>
 <header class="top">
   <div class="wrap top-in">
     <div class="brand">
@@ -41,6 +61,10 @@
       <a href="#chips" role="tab" data-tab="chips">籌碼</a>
       <a href="#transcript" role="tab" data-tab="transcript">法說會</a>
     </nav>
+    <div class="acct">
+      <button type="button" class="btn small" id="pw-open">修改密碼</button>
+      <button type="button" class="btn small ghost" id="logout">登出</button>
+    </div>
   </div>
 </header>
 

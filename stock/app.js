@@ -1,24 +1,74 @@
 /* 台股盤後雷達 — renders data/latest.json; the transcript tool runs fully client-side. */
 
-/* Login gate. Only a SHA-256 of "帳號:密碼" is stored here. To change the login, replace LOGIN_HASH
-   with the hash of the new "帳號:密碼". This keeps casual visitors out; it is not strong security. */
+/* Login gate. Only a SHA-256 of "帳號:密碼" is kept: the default below, or the one saved with
+   「修改密碼」 in the artifact's database (settings/login). This keeps casual visitors out;
+   it is not strong security. */
 (() => {
-  const LOGIN_HASH = 'e57a6ece45ee87e7eb76cec31704057d201a7285a9c682b5f1c68fe888a4fd6c';
+  const DEFAULT_HASH = 'e57a6ece45ee87e7eb76cec31704057d201a7285a9c682b5f1c68fe888a4fd6c'; // Admin:0000
   const KEY = 'radar:auth';
+  const $ = (id) => document.getElementById(id);
+  const sha = async (t) => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t))), (b) => b.toString(16).padStart(2, '0')).join('');
+
+  let db = null;
+  // Resolve the current login hash: the saved one if the database answers, else the default.
+  const hashReady = (async () => {
+    try {
+      db = await (window.claude?.use ? Promise.race([window.claude.use('db'), new Promise((r) => setTimeout(() => r(null), 10000))]) : null);
+      if (!db) return DEFAULT_HASH;
+      const snap = await Promise.race([db.doc('settings/login').get(), new Promise((_, j) => setTimeout(() => j(new Error('timeout')), 10000))]);
+      return (snap.exists && snap.data().hash) || DEFAULT_HASH;
+    } catch { return DEFAULT_HASH; }
+  })();
+
   const unlock = () => document.documentElement.classList.add('unlocked');
-  try { if (sessionStorage.getItem(KEY) === LOGIN_HASH) unlock(); } catch { /* storage blocked */ }
-  const form = document.getElementById('gate-form');
-  form.addEventListener('submit', async (e) => {
+  hashReady.then((h) => { try { if (sessionStorage.getItem(KEY) === h) unlock(); } catch { /* storage blocked */ } });
+
+  $('gate-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const text = document.getElementById('gate-user').value.trim() + ':' + document.getElementById('gate-pass').value;
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-    const hex = Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, '0')).join('');
-    if (hex === LOGIN_HASH) {
+    const btn = e.submitter; if (btn) btn.disabled = true;
+    const [hex, cur] = await Promise.all([sha($('gate-user').value.trim() + ':' + $('gate-pass').value), hashReady]);
+    if (btn) btn.disabled = false;
+    if (hex === cur) {
       try { sessionStorage.setItem(KEY, hex); } catch { /* storage blocked */ }
+      $('gate-err').hidden = true;
       unlock();
     } else {
-      document.getElementById('gate-err').hidden = false;
-      document.getElementById('gate-pass').value = '';
+      $('gate-err').hidden = false;
+      $('gate-pass').value = '';
+    }
+  });
+
+  $('logout').addEventListener('click', () => {
+    try { sessionStorage.removeItem(KEY); } catch { /* storage blocked */ }
+    document.documentElement.classList.remove('unlocked');
+    $('gate-pass').value = '';
+  });
+
+  const modal = $('pw-modal'), msg = $('pw-msg');
+  const say = (t, ok) => { msg.textContent = t; msg.className = ok ? 'gate-ok' : 'gate-err'; msg.hidden = false; };
+  $('pw-open').addEventListener('click', () => { $('pw-form').reset(); msg.hidden = true; modal.hidden = false; $('pw-curuser').focus(); });
+  $('pw-cancel').addEventListener('click', () => { modal.hidden = true; });
+  modal.addEventListener('keydown', (e) => { if (e.key === 'Escape') modal.hidden = true; });
+  $('pw-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const user = $('pw-user').value.trim(), pw = $('pw-new').value;
+    if (pw !== $('pw-new2').value) return say('兩次輸入的新密碼不一樣。');
+    if (!user || user.includes(':')) return say('帳號不能空白，也不能包含「:」。');
+    const cur = await hashReady;
+    if ((await sha($('pw-curuser').value.trim() + ':' + $('pw-cur').value)) !== cur) return say('目前的帳號或密碼不正確。');
+    if (!db) return say('這個畫面無法儲存設定（需要登入 Claude 並使用你自己的頁面）。');
+    $('pw-save').disabled = true;
+    try {
+      const next = await sha(user + ':' + pw);
+      await db.doc('settings/login').set({ hash: next, updated: new Date().toISOString() });
+      try { sessionStorage.setItem(KEY, next); } catch { /* storage blocked */ }
+      $('gate-user').value = user;
+      say('已更新。下次登入請用新的帳號密碼。', true);
+      setTimeout(() => { modal.hidden = true; }, 1500);
+    } catch (err) {
+      say('儲存失敗：' + (err?.message || err) + '。請稍後再試。');
+    } finally {
+      $('pw-save').disabled = false;
     }
   });
 })();
