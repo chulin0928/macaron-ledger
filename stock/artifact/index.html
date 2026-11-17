@@ -258,7 +258,7 @@ html.unlocked .gate { display: none; }
     <span class="mark" aria-hidden="true"></span>
     <h1>auto stock</h1>
     <label for="gate-user">Username</label>
-    <input id="gate-user" name="username" autocomplete="username" required>
+    <input id="gate-user" autocapitalize="none" autocorrect="off" spellcheck="false" name="username" autocomplete="username" required>
     <label for="gate-pass">Password</label>
     <input id="gate-pass" name="password" type="password" autocomplete="current-password" required>
     <p id="gate-err" class="gate-err" hidden>Wrong username or password. Please try again.</p>
@@ -269,15 +269,15 @@ html.unlocked .gate { display: none; }
   <form id="pw-form" class="gate-card" role="dialog" aria-modal="true" aria-labelledby="pw-title">
     <h2 id="pw-title">修改帳號密碼</h2>
     <label for="pw-curuser">目前帳號</label>
-    <input id="pw-curuser" autocomplete="username" required>
+    <input id="pw-curuser" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" required>
     <label for="pw-cur">目前密碼</label>
     <input id="pw-cur" type="password" autocomplete="current-password" required>
     <label for="pw-user">新帳號</label>
-    <input id="pw-user" autocomplete="username" required>
+    <input id="pw-user" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" required>
     <label for="pw-new">新密碼</label>
-    <input id="pw-new" type="password" autocomplete="new-password" minlength="4" required>
+    <input id="pw-new" type="password" autocomplete="new-password" required>
     <label for="pw-new2">再輸入一次新密碼</label>
-    <input id="pw-new2" type="password" autocomplete="new-password" minlength="4" required>
+    <input id="pw-new2" type="password" autocomplete="new-password" required>
     <p id="pw-msg" class="gate-err" hidden></p>
     <div class="modal-actions">
       <button type="button" class="btn" id="pw-cancel">取消</button>
@@ -419,46 +419,49 @@ html.unlocked .gate { display: none; }
 <script>
 /* 台股盤後雷達 — renders data/latest.json; the transcript tool runs fully client-side. */
 
-/* Login gate. Only a SHA-256 of "帳號:密碼" is kept: the default below, or the one saved with
-   「修改密碼」 in the artifact's database (settings/login). This keeps casual visitors out;
-   it is not strong security. */
+/* Login gate. Only a SHA-256 of "username:password" is kept (username lower-cased): the default
+   below, or the one saved with 修改密碼 — in the artifact's database (settings/login, works on every
+   device) or, if that is unreachable, in this browser. Keeps casual visitors out; not strong security. */
 (() => {
-  const DEFAULT_HASH = 'e57a6ece45ee87e7eb76cec31704057d201a7285a9c682b5f1c68fe888a4fd6c'; // Admin:0000
-  const KEY = 'radar:auth';
+  const DEFAULT_HASH = '3e05ac42a24563324d28e58f2329a39cc71bb9242050f3b41b51823ae1bbd384'; // admin:0000
+  const KEY = 'radar:auth', LOCAL = 'radar:login-hash';
   const $ = (id) => document.getElementById(id);
   const sha = async (t) => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t))), (b) => b.toString(16).padStart(2, '0')).join('');
+  const cred = (u, p) => sha(u.trim().toLowerCase() + ':' + p);
+  // logins saved by the first version kept the username's exact capitals: accept those too
+  const matches = async (u, p) => { const a = await cred(u, p); return a === current || (await sha(u.trim() + ':' + p)) === current ? a : null; };
+  const ls = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); return true; } catch { return false; } } };
+  const ss = { get(k) { try { return sessionStorage.getItem(k); } catch { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch { /* blocked */ } }, del(k) { try { sessionStorage.removeItem(k); } catch { /* blocked */ } } };
+  const withTimeout = (p, ms) => Promise.race([p, new Promise((_, j) => setTimeout(() => j(new Error('timeout')), ms))]);
 
-  let db = null;
-  // Resolve the current login hash: the saved one if the database answers, else the default.
+  const getDb = async () => {
+    try { return window.claude?.use ? await withTimeout(window.claude.use('db'), 10000) : null; } catch { return null; }
+  };
+  let current = DEFAULT_HASH;
   const hashReady = (async () => {
-    try {
-      db = await (window.claude?.use ? Promise.race([window.claude.use('db'), new Promise((r) => setTimeout(() => r(null), 10000))]) : null);
-      if (!db) return DEFAULT_HASH;
-      const snap = await Promise.race([db.doc('settings/login').get(), new Promise((_, j) => setTimeout(() => j(new Error('timeout')), 10000))]);
-      return (snap.exists && snap.data().hash) || DEFAULT_HASH;
-    } catch { return DEFAULT_HASH; }
+    const db = await getDb();
+    if (db) {
+      try {
+        const snap = await withTimeout(db.doc('settings/login').get(), 10000);
+        if (snap.exists && snap.data().hash) return (current = snap.data().hash);
+      } catch { /* fall through */ }
+    }
+    return (current = ls.get(LOCAL) || DEFAULT_HASH);
   })();
 
   const unlock = () => document.documentElement.classList.add('unlocked');
-  hashReady.then((h) => { try { if (sessionStorage.getItem(KEY) === h) unlock(); } catch { /* storage blocked */ } });
+  hashReady.then((h) => { if (ss.get(KEY) === h) unlock(); });
 
   $('gate-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btn = e.submitter; if (btn) btn.disabled = true;
-    const [hex, cur] = await Promise.all([sha($('gate-user').value.trim() + ':' + $('gate-pass').value), hashReady]);
-    if (btn) btn.disabled = false;
-    if (hex === cur) {
-      try { sessionStorage.setItem(KEY, hex); } catch { /* storage blocked */ }
-      $('gate-err').hidden = true;
-      unlock();
-    } else {
-      $('gate-err').hidden = false;
-      $('gate-pass').value = '';
-    }
+    await hashReady;
+    const hex = await matches($('gate-user').value, $('gate-pass').value);
+    if (hex) { ss.set(KEY, current); $('gate-err').hidden = true; unlock(); }
+    else { $('gate-err').hidden = false; $('gate-pass').value = ''; }
   });
 
   $('logout').addEventListener('click', () => {
-    try { sessionStorage.removeItem(KEY); } catch { /* storage blocked */ }
+    ss.del(KEY);
     document.documentElement.classList.remove('unlocked');
     $('gate-pass').value = '';
   });
@@ -471,24 +474,25 @@ html.unlocked .gate { display: none; }
   $('pw-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const user = $('pw-user').value.trim(), pw = $('pw-new').value;
+    if (!user || user.includes(':')) return say('新帳號不能空白，也不能包含「:」。');
+    if (!pw) return say('新密碼不能空白。');
     if (pw !== $('pw-new2').value) return say('兩次輸入的新密碼不一樣。');
-    if (!user || user.includes(':')) return say('帳號不能空白，也不能包含「:」。');
-    const cur = await hashReady;
-    if ((await sha($('pw-curuser').value.trim() + ':' + $('pw-cur').value)) !== cur) return say('目前的帳號或密碼不正確。');
-    if (!db) return say('這個畫面無法儲存設定（需要登入 Claude 並使用你自己的頁面）。');
-    $('pw-save').disabled = true;
-    try {
-      const next = await sha(user + ':' + pw);
-      await db.doc('settings/login').set({ hash: next, updated: new Date().toISOString() });
-      try { sessionStorage.setItem(KEY, next); } catch { /* storage blocked */ }
-      $('gate-user').value = user;
-      say('已更新。下次登入請用新的帳號密碼。', true);
-      setTimeout(() => { modal.hidden = true; }, 1500);
-    } catch (err) {
-      say('儲存失敗：' + (err?.message || err) + '。請稍後再試。');
-    } finally {
-      $('pw-save').disabled = false;
-    }
+    await hashReady;
+    if (!(await matches($('pw-curuser').value, $('pw-cur').value))) return say('目前的帳號或密碼不正確。');
+    const save = $('pw-save'); save.disabled = true; say('儲存中…', true);
+    const next = await cred(user, pw);
+    let where = null, why = '';
+    const db = await getDb();
+    if (db) {
+      try { await withTimeout(db.doc('settings/login').set({ hash: next, updated: new Date().toISOString() }), 15000); where = 'cloud'; }
+      catch (err) { why = err?.code || err?.message || String(err); }
+    } else { why = 'no-db'; }
+    if (!where && ls.set(LOCAL, next)) where = 'device';
+    save.disabled = false;
+    if (!where) return say('儲存失敗（' + why + '）。請截圖給 Claude。');
+    current = next; ss.set(KEY, next);
+    say(where === 'cloud' ? '已更新！所有裝置都要用新的帳號密碼登入。' : '已更新，但只存在這台裝置（' + why + '）。其他裝置仍用舊密碼。', true);
+    setTimeout(() => { modal.hidden = true; }, where === 'cloud' ? 1500 : 4000);
   });
 })();
 

@@ -19,7 +19,7 @@
     <span class="mark" aria-hidden="true"></span>
     <h1>auto stock</h1>
     <label for="gate-user">Username</label>
-    <input id="gate-user" name="username" autocomplete="username" required>
+    <input id="gate-user" autocapitalize="none" autocorrect="off" spellcheck="false" name="username" autocomplete="username" required>
     <label for="gate-pass">Password</label>
     <input id="gate-pass" name="password" type="password" autocomplete="current-password" required>
     <p id="gate-err" class="gate-err" hidden>Wrong username or password. Please try again.</p>
@@ -30,15 +30,15 @@
   <form id="pw-form" class="gate-card" role="dialog" aria-modal="true" aria-labelledby="pw-title">
     <h2 id="pw-title">修改帳號密碼</h2>
     <label for="pw-curuser">目前帳號</label>
-    <input id="pw-curuser" autocomplete="username" required>
+    <input id="pw-curuser" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" required>
     <label for="pw-cur">目前密碼</label>
     <input id="pw-cur" type="password" autocomplete="current-password" required>
     <label for="pw-user">新帳號</label>
-    <input id="pw-user" autocomplete="username" required>
+    <input id="pw-user" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" required>
     <label for="pw-new">新密碼</label>
-    <input id="pw-new" type="password" autocomplete="new-password" minlength="4" required>
+    <input id="pw-new" type="password" autocomplete="new-password" required>
     <label for="pw-new2">再輸入一次新密碼</label>
-    <input id="pw-new2" type="password" autocomplete="new-password" minlength="4" required>
+    <input id="pw-new2" type="password" autocomplete="new-password" required>
     <p id="pw-msg" class="gate-err" hidden></p>
     <div class="modal-actions">
       <button type="button" class="btn" id="pw-cancel">取消</button>
