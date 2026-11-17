@@ -1,0 +1,596 @@
+{
+ "title": "TOEIC 800 Daily News Reading",
+ "subtitle": "每日英文新聞閱讀練習與字彙整理",
+ "date": "2026-11-17",
+ "articles": [
+  {
+   "n": 1,
+   "category": "World Affairs",
+   "title": "Ukraine Launches Record Drone Barrage as Crimean Bridge Is Struck",
+   "source": "The Irish Times (Reuters report)",
+   "url": "https://www.irishtimes.com/world/europe/2026/11/16/ukraine-strikes-crimean-bridge-in-record-drone-attack/",
+   "body": [
+    "Ukraine carried out what Russia described as the largest drone attack of the war on Monday, striking the Crimean Bridge and sending hundreds of unmanned aircraft toward Moscow in a coordinated overnight assault. According to Russia's defence ministry, air defences intercepted or destroyed 2,049 drones over a 24-hour period across roughly 15 regions. Moscow's mayor said about 600 of them had been heading for the capital, the vast majority of which were brought down before reaching their targets.",
+    "The most symbolically significant blow fell on the bridge linking mainland Russia to the occupied Crimean peninsula. Footage circulating on Russian social media appeared to show an explosion on one span followed by a large fireball. The region's Russian-installed governor announced that road traffic would be restricted until at least midday while emergency crews assessed the structure, although rail services resumed within hours. The Kremlin's spokesman sought to downplay the incident, characterising the damage as minor and insisting that vehicles were still able to cross.",
+    "The bridge, which opened in 2018 following Russia's 2014 annexation of Crimea, has served as a vital military supply route since the full-scale invasion began. Ukraine has targeted it on at least four previous occasions, most notably in October 2022 when a truck bomb killed five people. Kyiv has not formally commented on the latest strike, but Ukrainian drone operators have previously described attacks on bridges to Crimea as part of a deliberate medium-range campaign against Russian logistics.",
+    "The escalation comes at a delicate diplomatic moment. The first US-brokered peace talks in nine months concluded last week in Abu Dhabi without a breakthrough, and Russia has simultaneously intensified its own strikes on bridges across the Dnipro river in Kyiv. President Volodymyr Zelenskiy has warned European partners that Moscow intends to sever the country along the river, cutting power supplies from west to east and potentially leaving millions without electricity as winter approaches.",
+    "Observers note that both sides appear to be using infrastructure attacks to strengthen their leverage ahead of any renewed negotiations. For ordinary Ukrainians and Russians alike, however, the immediate consequence is a further deterioration in daily life, with disrupted transport, damaged homes and businesses, and growing uncertainty about the months ahead."
+   ],
+   "summary": "俄羅斯國防部表示，烏克蘭於週一發動開戰以來規模最大的無人機攻擊，24小時內逾2,000架無人機襲擊約15個地區，連接克里米亞的刻赤大橋亦遭擊中，交通一度受限。此次升級正值美國斡旋的和談陷入僵局之際，雙方皆加強對橋樑與基礎設施的攻擊，以增加談判籌碼。",
+   "vocab": [
+    {
+     "word": "barrage",
+     "key": "barrage",
+     "star": false,
+     "ipa": "/bəˈrɑːʒ/",
+     "pos": "n.",
+     "zh": "彈幕；連續猛烈的攻擊（或質問）",
+     "colloc": "a barrage of criticism",
+     "example": "The minister faced a barrage of questions from reporters."
+    },
+    {
+     "word": "intercept",
+     "key": "intercept",
+     "star": true,
+     "ipa": "/ˌɪntərˈsept/",
+     "pos": "v.",
+     "zh": "攔截",
+     "colloc": "intercept a message",
+     "example": "The goalkeeper intercepted the pass before it reached the striker."
+    },
+    {
+     "word": "assess",
+     "key": "assess",
+     "star": true,
+     "ipa": "/əˈses/",
+     "pos": "v.",
+     "zh": "評估",
+     "colloc": "assess the damage",
+     "example": "Engineers will assess the structure before reopening the road."
+    },
+    {
+     "word": "downplay",
+     "key": "downplay",
+     "star": false,
+     "ipa": "/ˌdaʊnˈpleɪ/",
+     "pos": "v.",
+     "zh": "淡化；低調處理",
+     "colloc": "downplay the risks",
+     "example": "The CEO downplayed concerns about falling sales."
+    },
+    {
+     "word": "annexation",
+     "key": "annexation",
+     "star": false,
+     "ipa": "/ˌænekˈseɪʃən/",
+     "pos": "n.",
+     "zh": "併吞；兼併",
+     "colloc": "the annexation of territory",
+     "example": "The annexation was condemned by the international community."
+    },
+    {
+     "word": "deliberate",
+     "key": "deliberate",
+     "star": true,
+     "ipa": "/dɪˈlɪbərət/",
+     "pos": "adj.",
+     "zh": "故意的；審慎的",
+     "colloc": "a deliberate attempt",
+     "example": "The delay was a deliberate strategy to gain more time."
+    },
+    {
+     "word": "breakthrough",
+     "key": "breakthrough",
+     "star": true,
+     "ipa": "/ˈbreɪkθruː/",
+     "pos": "n.",
+     "zh": "突破；重大進展",
+     "colloc": "a major breakthrough",
+     "example": "Scientists announced a breakthrough in battery technology."
+    },
+    {
+     "word": "sever",
+     "key": "sever",
+     "star": false,
+     "ipa": "/ˈsevər/",
+     "pos": "v.",
+     "zh": "切斷；斷絕",
+     "colloc": "sever ties with",
+     "example": "The company severed ties with the supplier after the scandal."
+    },
+    {
+     "word": "leverage",
+     "key": "leverage",
+     "star": true,
+     "ipa": "/ˈlevərɪdʒ/",
+     "pos": "n.",
+     "zh": "影響力；談判籌碼；槓桿",
+     "colloc": "gain leverage over",
+     "example": "The union hopes the strike will give it more leverage in negotiations."
+    },
+    {
+     "word": "deterioration",
+     "key": "deterioration",
+     "star": false,
+     "ipa": "/dɪˌtɪəriəˈreɪʃən/",
+     "pos": "n.",
+     "zh": "惡化；退化",
+     "colloc": "a sharp deterioration in",
+     "example": "The report noted a steady deterioration in air quality."
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "category": "Business & Economy",
+   "title": "Wall Street Tumbles as AI Jitters Push Nasdaq into Correction",
+   "source": "Reuters (via MarketScreener)",
+   "url": "https://www.marketscreener.com/news/wall-street-slumps-on-ai-jitters-ahead-of-nvidia-results-anthropic-ipo-ce785edfdd8ef425",
+   "body": [
+    "US stocks fell sharply on Monday as renewed anxiety over the artificial intelligence boom swept through technology shares, pushing the Nasdaq Composite into correction territory. The tech-heavy index dropped 2.5 per cent to close at 24,509, leaving it more than 10 per cent below the record high it set in early October. The broader S&P 500 declined 1.9 per cent, while the Dow Jones Industrial Average shed 1.4 per cent, or roughly 740 points.",
+    "Semiconductor stocks bore the brunt of the selling. The Philadelphia Semiconductor Index plunged 5.3 per cent, a dramatic reversal for a sector that had more than doubled in value by mid-June. Nvidia, the bellwether of the AI trade, slid 4.1 per cent as investors continued to digest the abrupt resignation of its co-founder and chief executive, Jensen Huang, last week. Intel and Micron each lost more than 7 per cent, and AI-infrastructure names such as Dell and CoreWeave also posted steep losses. Among the large internet platforms, Alphabet, Amazon and Meta declined between 2.4 and 4.1 per cent.",
+    "The sell-off was compounded by policy developments in Washington. The Trump administration issued a new rule tightening China's access to advanced AI chips ahead of the president's expected meeting with Xi Jinping this week, and the Commerce Department unveiled a plan to close procurement loopholes for restricted hardware. Together, these measures raised fresh doubts about the export revenue of leading chipmakers.",
+    "Investors are now bracing for a pivotal stretch of events. Nvidia reports quarterly earnings on Tuesday, with analysts forecasting a 90 per cent jump in profit on revenue of about 109 billion dollars. Later in the week, Anthropic's highly anticipated initial public offering is expected to price, offering a test of market appetite for AI assets. Minutes from the Federal Reserve's latest meeting are also due, and futures markets currently imply a 96 per cent probability of a quarter-point interest-rate rise in December.",
+    "Market strategists stressed that the rotation does not necessarily signal a wholesale retreat from equities. Ross Mayfield of Baird described a tug-of-war between AI-related stocks catching a bid and money rotating into other segments, suggesting that capital is shifting within the stock market rather than leaving it altogether. Nonetheless, market breadth was decidedly negative, with decliners outnumbering advancers by more than three to one on the New York Stock Exchange."
+   ],
+   "summary": "美股週一重挫，AI相關憂慮引發科技股賣壓，那斯達克指數下跌2.5%並正式進入修正區間，費城半導體指數暴跌5.3%。輝達執行長黃仁勳辭職的餘波、華府收緊中國取得先進AI晶片的管道，加上本週輝達財報與Anthropic IPO等重大事件，令投資人格外謹慎。",
+   "vocab": [
+    {
+     "word": "correction",
+     "key": "correction",
+     "star": true,
+     "ipa": "/kəˈrekʃən/",
+     "pos": "n.",
+     "zh": "（股市）修正；更正",
+     "colloc": "a market correction",
+     "example": "Analysts warned that a correction was overdue after months of gains."
+    },
+    {
+     "word": "bear the brunt of",
+     "key": "bear the brunt of",
+     "star": false,
+     "ipa": "/beər ðə brʌnt əv/",
+     "pos": "phr.",
+     "zh": "承受…的主要衝擊",
+     "colloc": "bear the brunt of the cuts",
+     "example": "Small businesses bore the brunt of the recession."
+    },
+    {
+     "word": "bellwether",
+     "key": "bellwether",
+     "star": false,
+     "ipa": "/ˈbelˌweðər/",
+     "pos": "n.",
+     "zh": "領頭羊；風向指標",
+     "colloc": "a bellwether stock",
+     "example": "The company is seen as a bellwether for the retail sector."
+    },
+    {
+     "word": "abrupt",
+     "key": "abrupt",
+     "star": true,
+     "ipa": "/əˈbrʌpt/",
+     "pos": "adj.",
+     "zh": "突然的；唐突的",
+     "colloc": "an abrupt change",
+     "example": "The meeting came to an abrupt end."
+    },
+    {
+     "word": "compound",
+     "key": "compound",
+     "star": false,
+     "ipa": "/kəmˈpaʊnd/",
+     "pos": "v.",
+     "zh": "使惡化；加劇",
+     "colloc": "compound the problem",
+     "example": "Rising costs compounded the firm's difficulties."
+    },
+    {
+     "word": "loophole",
+     "key": "loophole",
+     "star": false,
+     "ipa": "/ˈluːphoʊl/",
+     "pos": "n.",
+     "zh": "（法律、規定的）漏洞",
+     "colloc": "close a loophole",
+     "example": "The new law closes a tax loophole used by multinationals."
+    },
+    {
+     "word": "brace for",
+     "key": "brace for",
+     "star": true,
+     "ipa": "/breɪs fɔːr/",
+     "pos": "phr. v.",
+     "zh": "為…做好準備",
+     "colloc": "brace for impact",
+     "example": "Retailers are bracing for a slow holiday season."
+    },
+    {
+     "word": "pivotal",
+     "key": "pivotal",
+     "star": false,
+     "ipa": "/ˈpɪvətl/",
+     "pos": "adj.",
+     "zh": "關鍵的；樞軸的",
+     "colloc": "play a pivotal role",
+     "example": "This quarter will be pivotal for the company's turnaround."
+    },
+    {
+     "word": "appetite",
+     "key": "appetite",
+     "star": true,
+     "ipa": "/ˈæpɪtaɪt/",
+     "pos": "n.",
+     "zh": "興趣；需求；（風險）偏好",
+     "colloc": "appetite for risk",
+     "example": "There is strong appetite among investors for green bonds."
+    },
+    {
+     "word": "wholesale",
+     "key": "wholesale",
+     "star": true,
+     "ipa": "/ˈhoʊlseɪl/",
+     "pos": "adj.",
+     "zh": "全面的；批發的",
+     "colloc": "wholesale changes",
+     "example": "The new manager made wholesale changes to the team."
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "category": "Science & Health",
+   "title": "United States Loses Measles Elimination Status After 26 Years",
+   "source": "Forbes (John Drake)",
+   "url": "https://www.forbes.com/sites/johndrake/2026/11/15/the-us-has-lost-its-measles-free-status-getting-it-back-will-take-years/",
+   "body": [
+    "The United States has lost the measles elimination status it had maintained since 2000, according to multiple reports, after a regional verification commission concluded that the virus had circulated continuously within the country for more than twelve months. The commission, convened by the Pan American Health Organization (PAHO), met from 10 to 13 November, and a formal announcement is expected this week. Under PAHO's criteria, a nation forfeits elimination status when a single viral lineage is transmitted domestically for a year or longer.",
+    "The scale of the resurgence is striking. The Centers for Disease Control and Prevention has confirmed 5,412 cases so far in 2026, more than double the 2,289 recorded in 2025 and the highest annual total since 1991. State health departments have reported ten deaths this year. By comparison, in 2000, when elimination was first declared, only 85 cases were documented nationwide. Epidemiologists emphasise that this is the first year in decades in which most infections have been acquired locally rather than imported from abroad.",
+    "The decisive outbreak occurred in Utah, where transmission passed the one-year mark in June. Genomic sequencing has linked cases in Utah and Arizona to the same expanding lineage of genotype D8 that fuelled the West Texas outbreak, while South Carolina's cases form a separate sublineage. Several Utah counties report MMR vaccination coverage below 80 per cent, well short of the roughly 95 per cent population immunity required to prevent sustained spread. Nationally, kindergarten coverage with two doses has slipped to 92.4 per cent, and the proportion of children lacking a complete series has risen by more than half since 2019.",
+    "Public health experts describe the designation as largely symbolic, since it carries no legal penalties. Nevertheless, they regard it as an urgent warning that routine immunisation has broken down in vulnerable communities. To regain its status, the United States must now demonstrate at least twelve consecutive months without sustained transmission, a process that took Brazil five years and Venezuela a similar period. Canada, which lost its own status a year ago, remains classified as endemic. Noel Brewer, who chairs the US committee reporting to PAHO, offered a sobering assessment: with regard to measles, the country is no longer a safe place for children."
+   ],
+   "summary": "根據多方報導，泛美衛生組織（PAHO）的核查委員會認定美國境內麻疹病毒已持續傳播超過一年，美國因此失去自2000年以來維持的麻疹消除地位。2026年至今已確診5,412例、通報十人死亡，為1991年以來最高，其中猶他州疫情是關鍵。專家指出，幼兒園MMR兩劑接種率已降至92.4%，低於約95%的群體免疫門檻；要重新取得地位，至少需連續12個月無持續傳播。",
+   "vocab": [
+    {
+     "word": "eliminate",
+     "key": "eliminate",
+     "star": true,
+     "ipa": "/ɪˈlɪmɪneɪt/",
+     "pos": "v.",
+     "zh": "消除；根除；淘汰",
+     "colloc": "eliminate the risk",
+     "example": "The new process eliminates the need for paper forms."
+    },
+    {
+     "word": "criteria",
+     "key": "criteria",
+     "star": true,
+     "ipa": "/kraɪˈtɪəriə/",
+     "pos": "n. (pl.)",
+     "zh": "標準；準則（單數 criterion）",
+     "colloc": "meet the criteria",
+     "example": "Applicants must meet strict criteria to qualify for the grant."
+    },
+    {
+     "word": "forfeit",
+     "key": "forfeit",
+     "star": false,
+     "ipa": "/ˈfɔːrfɪt/",
+     "pos": "v.",
+     "zh": "（因違規或失敗而）喪失",
+     "colloc": "forfeit the right to",
+     "example": "Players who arrive late will forfeit the match."
+    },
+    {
+     "word": "resurgence",
+     "key": "resurgence",
+     "star": false,
+     "ipa": "/rɪˈsɜːrdʒəns/",
+     "pos": "n.",
+     "zh": "復甦；再起",
+     "colloc": "a resurgence of interest",
+     "example": "The city has seen a resurgence of interest in cycling."
+    },
+    {
+     "word": "transmission",
+     "key": "transmission",
+     "star": false,
+     "ipa": "/trænzˈmɪʃən/",
+     "pos": "n.",
+     "zh": "傳播；傳染；傳輸",
+     "colloc": "transmission of the virus",
+     "example": "Masks can reduce the transmission of respiratory infections."
+    },
+    {
+     "word": "coverage",
+     "key": "coverage",
+     "star": true,
+     "ipa": "/ˈkʌvərɪdʒ/",
+     "pos": "n.",
+     "zh": "覆蓋率；（保險）保障範圍；報導",
+     "colloc": "insurance coverage",
+     "example": "The policy provides coverage for dental treatment."
+    },
+    {
+     "word": "proportion",
+     "key": "proportion",
+     "star": true,
+     "ipa": "/prəˈpɔːrʃən/",
+     "pos": "n.",
+     "zh": "比例；部分",
+     "colloc": "a large proportion of",
+     "example": "A growing proportion of employees now work remotely."
+    },
+    {
+     "word": "symbolic",
+     "key": "symbolic",
+     "star": false,
+     "ipa": "/sɪmˈbɒlɪk/",
+     "pos": "adj.",
+     "zh": "象徵性的",
+     "colloc": "a symbolic gesture",
+     "example": "The handshake was a symbolic gesture of reconciliation."
+    },
+    {
+     "word": "consecutive",
+     "key": "consecutive",
+     "star": true,
+     "ipa": "/kənˈsekjətɪv/",
+     "pos": "adj.",
+     "zh": "連續的",
+     "colloc": "three consecutive years",
+     "example": "Sales have risen for five consecutive quarters."
+    },
+    {
+     "word": "sobering",
+     "key": "sobering",
+     "star": false,
+     "ipa": "/ˈsoʊbərɪŋ/",
+     "pos": "adj.",
+     "zh": "令人警醒的；發人深省的",
+     "colloc": "a sobering thought",
+     "example": "The report offers a sobering assessment of the housing market."
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "category": "Technology & Space",
+   "title": "Vulcan Rocket Failure Destroys 40 Amazon Leo Satellites",
+   "source": "Spaceflight Now",
+   "url": "https://spaceflightnow.com/2026/11/15/ula-suffers-first-total-mission-failure-with-loss-of-vulcan-rocket-carrying-40-amazon-leo-satellites/",
+   "body": [
+    "United Launch Alliance (ULA) suffered the first outright mission failure in its twenty-year history on Sunday when its Vulcan rocket malfunctioned roughly ten minutes after lift-off, destroying a payload of 40 Amazon Leo broadband satellites. The vehicle departed Space Launch Complex 41 at Cape Canaveral, Florida, at 12:40 p.m. Eastern time following two days of technical delays, including a nitrogen supply outage on Friday and ground-network problems on Saturday.",
+    "Initial indications suggest that the six solid rocket boosters performed normally and separated as planned. However, the BE-4 engines on the first stage appeared to burn longer than scheduled, and separation of the Centaur upper stage occurred later than expected. The failure is believed to have taken place during the Centaur's planned twelve-minute burn, when the stage made unusual orientation adjustments. ULA's live broadcast ended without acknowledging any problem; the company later confirmed in a statement that the rocket had experienced an anomaly and that it would work with its customer and government agencies to determine the root cause and return to flight as quickly as possible.",
+    "The setback is a significant blow to Amazon's ambitions in satellite internet. Sunday's mission was the first of 38 Vulcan launches the company has purchased for Leo, its constellation designed to compete with SpaceX's Starlink service. Amazon has also booked flights on Blue Origin's New Glenn, Europe's Ariane 6 and SpaceX's own Falcon 9. More than 3,300 satellites are required to complete the network; the lost batch would have raised the total launched to 436. Compounding the difficulty, New Glenn remains grounded after an on-pad explosion in May that was traced to a valve problem in its BE-4 engine, the same engine type that powers Vulcan's first stage.",
+    "For ULA, a joint venture between Boeing and Lockheed Martin, the failure raises uncomfortable questions. Vulcan had flown only four times previously, and this was its first launch in nine months following an investigation into nozzle defects on its solid boosters that prompted the US Space Force to pause national-security missions. Before the flight, the company's chief executive had stated that engineers identified three credible causes of the nozzle problem and mitigated all of them. NASA has offered assistance with the inquiry, but the rocket now faces a potentially lengthy grounding while telemetry is scrutinised and corrective measures are implemented."
+   ],
+   "summary": "聯合發射聯盟（ULA）的火神（Vulcan）火箭週日自佛州卡納維爾角升空約十分鐘後發生異常，搭載的40顆亞馬遜Leo寬頻衛星全數損毀，為該公司成立二十年來首次徹底任務失敗。此次是亞馬遜採購的38次火神發射中的第一次；加上藍色起源的New Glenn火箭仍在停飛，亞馬遜對抗星鏈（Starlink）的衛星網路計畫勢將面臨延誤。",
+   "vocab": [
+    {
+     "word": "malfunction",
+     "key": "malfunction",
+     "star": true,
+     "ipa": "/ˌmælˈfʌŋkʃən/",
+     "pos": "v. / n.",
+     "zh": "故障；失靈",
+     "colloc": "a system malfunction",
+     "example": "The printer malfunctioned twice during the presentation."
+    },
+    {
+     "word": "payload",
+     "key": "payload",
+     "star": false,
+     "ipa": "/ˈpeɪloʊd/",
+     "pos": "n.",
+     "zh": "有效載荷；載運物",
+     "colloc": "deliver a payload",
+     "example": "The truck's payload must not exceed ten tonnes."
+    },
+    {
+     "word": "outage",
+     "key": "outage",
+     "star": true,
+     "ipa": "/ˈaʊtɪdʒ/",
+     "pos": "n.",
+     "zh": "停電；服務中斷",
+     "colloc": "a power outage",
+     "example": "A network outage left thousands of customers without internet."
+    },
+    {
+     "word": "anomaly",
+     "key": "anomaly",
+     "star": false,
+     "ipa": "/əˈnɒməli/",
+     "pos": "n.",
+     "zh": "異常；反常現象",
+     "colloc": "detect an anomaly",
+     "example": "The auditors detected an anomaly in the accounts."
+    },
+    {
+     "word": "acknowledge",
+     "key": "acknowledge",
+     "star": true,
+     "ipa": "/əkˈnɒlɪdʒ/",
+     "pos": "v.",
+     "zh": "承認；確認收到",
+     "colloc": "acknowledge receipt of",
+     "example": "The company acknowledged that the product had a defect."
+    },
+    {
+     "word": "setback",
+     "key": "setback",
+     "star": true,
+     "ipa": "/ˈsetbæk/",
+     "pos": "n.",
+     "zh": "挫折；阻礙",
+     "colloc": "suffer a setback",
+     "example": "The project suffered a major setback when funding was cut."
+    },
+    {
+     "word": "constellation",
+     "key": "constellation",
+     "star": false,
+     "ipa": "/ˌkɒnstəˈleɪʃən/",
+     "pos": "n.",
+     "zh": "星座；（衛星）星系群",
+     "colloc": "a satellite constellation",
+     "example": "The company plans to launch a constellation of 600 satellites."
+    },
+    {
+     "word": "joint venture",
+     "key": "joint venture",
+     "star": true,
+     "ipa": "/dʒɔɪnt ˈventʃər/",
+     "pos": "n.",
+     "zh": "合資企業",
+     "colloc": "form a joint venture",
+     "example": "The two carmakers formed a joint venture to build batteries."
+    },
+    {
+     "word": "mitigate",
+     "key": "mitigate",
+     "star": false,
+     "ipa": "/ˈmɪtɪɡeɪt/",
+     "pos": "v.",
+     "zh": "減輕；緩和",
+     "colloc": "mitigate the impact",
+     "example": "Insurance can help mitigate the financial impact of a flood."
+    },
+    {
+     "word": "scrutinise",
+     "key": "scrutinise",
+     "star": false,
+     "ipa": "/ˈskruːtənaɪz/",
+     "pos": "v.",
+     "zh": "仔細審查（美式拼法 scrutinize）",
+     "colloc": "scrutinise the details",
+     "example": "Regulators will scrutinise the merger closely."
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "category": "Sports",
+   "title": "Ronaldinho, 46, Returns to Competitive Football After Eleven Years",
+   "source": "ESPN",
+   "url": "https://www.espn.com/soccer/story/_/id/50258652/ronaldinho-first-match-11-years-ravenna",
+   "body": [
+    "Brazilian football legend Ronaldinho made an improbable return to competitive action on Sunday, starting for Italian third-division club Ravenna in a 2-0 derby victory over Forlì at the Stadio Bruno Benelli. The 46-year-old, who won the World Cup with Brazil in 2002 and the Ballon d'Or in 2005, had not played an official match since September 2015, when he appeared for Fluminense. According to Brazilian media, the gap amounted to 4,068 days.",
+    "Ronaldinho's association with Ravenna began in June, when the club, run by Ignazio Cipriani of the Cipriani hospitality brand, announced the surprise signing. He was presented to supporters at a beachside ceremony in August, and the club subsequently confirmed that he would make his debut against local rivals Forlì, describing the occasion as an event that would turn the world's attention toward their modest stadium. Cipriani has openly expressed his wish that the former Barcelona, AC Milan and Paris Saint-Germain star score the final goal of his career in a Ravenna shirt.",
+    "Although he had been expected to play for around half an hour, Ronaldinho remained on the pitch for the entire first half. He was involved in the build-up to the opening goal and displayed flashes of the vision and technique that captivated audiences two decades ago, even if his mobility was understandably limited. The victory extended Ravenna's winning streak to five matches and consolidated their position near the top of their Serie C group.",
+    "Speaking afterwards, Ronaldinho said the match had gone very well and that he had enjoyed playing alongside so many young players. Asked whether he would appear again, he replied that he did not know, but that if the president called, he would come back. He also expressed hope that both Italy and Brazil would once again win the World Cup and play attractive football.",
+    "The appearance is likely to divide opinion. Sceptics may argue that fielding a veteran in his mid-forties risks turning a competitive fixture into a publicity stunt, whereas supporters counter that the global attention and ticket revenue generated are invaluable for a lower-league club. Whatever one's view, the sight of one of the game's great entertainers back in a starting line-up was, for many fans, a moment of pure nostalgia."
+   ],
+   "summary": "46歲的巴西傳奇球星羅納迪尼奧（Ronaldinho）週日代表義大利丙級球隊拉溫納（Ravenna）先發出戰，在德比戰中以2比0擊敗弗利（Forlì），這是他自2015年以來、相隔逾11年的首場正式比賽。他踢滿上半場並參與首球進攻，賽後表示若俱樂部主席召喚，他願意再度披掛上陣。",
+   "vocab": [
+    {
+     "word": "improbable",
+     "key": "improbable",
+     "star": false,
+     "ipa": "/ɪmˈprɒbəbl/",
+     "pos": "adj.",
+     "zh": "不太可能的；出乎意料的",
+     "colloc": "an improbable comeback",
+     "example": "The team staged an improbable comeback in the final minutes."
+    },
+    {
+     "word": "association",
+     "key": "association",
+     "star": true,
+     "ipa": "/əˌsoʊsiˈeɪʃən/",
+     "pos": "n.",
+     "zh": "關聯；協會",
+     "colloc": "in association with",
+     "example": "The event was organised in association with the local chamber of commerce."
+    },
+    {
+     "word": "subsequently",
+     "key": "subsequently",
+     "star": true,
+     "ipa": "/ˈsʌbsɪkwəntli/",
+     "pos": "adv.",
+     "zh": "隨後；後來",
+     "colloc": "subsequently announced",
+     "example": "The company subsequently revised its forecast."
+    },
+    {
+     "word": "modest",
+     "key": "modest",
+     "star": true,
+     "ipa": "/ˈmɒdɪst/",
+     "pos": "adj.",
+     "zh": "適度的；不大的；謙虛的",
+     "colloc": "a modest increase",
+     "example": "The firm reported a modest increase in profits."
+    },
+    {
+     "word": "consolidate",
+     "key": "consolidate",
+     "star": true,
+     "ipa": "/kənˈsɒlɪdeɪt/",
+     "pos": "v.",
+     "zh": "鞏固；合併",
+     "colloc": "consolidate its position",
+     "example": "The merger will help the bank consolidate its position in Asia."
+    },
+    {
+     "word": "captivate",
+     "key": "captivate",
+     "star": false,
+     "ipa": "/ˈkæptɪveɪt/",
+     "pos": "v.",
+     "zh": "使著迷；吸引",
+     "colloc": "captivate the audience",
+     "example": "The speaker captivated the audience with her story."
+    },
+    {
+     "word": "alongside",
+     "key": "alongside",
+     "star": false,
+     "ipa": "/əˌlɒŋˈsaɪd/",
+     "pos": "prep.",
+     "zh": "與…一起；在…旁邊",
+     "colloc": "work alongside",
+     "example": "New hires will work alongside experienced mentors."
+    },
+    {
+     "word": "veteran",
+     "key": "veteran",
+     "star": true,
+     "ipa": "/ˈvetərən/",
+     "pos": "n.",
+     "zh": "老將；資深人士；退伍軍人",
+     "colloc": "a veteran of the industry",
+     "example": "She is a veteran of more than thirty years in publishing."
+    },
+    {
+     "word": "publicity stunt",
+     "key": "publicity stunt",
+     "star": false,
+     "ipa": "/pʌbˈlɪsəti stʌnt/",
+     "pos": "n.",
+     "zh": "宣傳噱頭",
+     "colloc": "stage a publicity stunt",
+     "example": "The giveaway was dismissed as a publicity stunt."
+    },
+    {
+     "word": "invaluable",
+     "key": "invaluable",
+     "star": false,
+     "ipa": "/ɪnˈvæljuəbl/",
+     "pos": "adj.",
+     "zh": "極寶貴的；無價的",
+     "colloc": "invaluable experience",
+     "example": "The internship gave him invaluable experience."
+    }
+   ]
+  }
+ ],
+ "grammar": [],
+ "notes": [],
+ "id": "TOEIC800_News_2026-11-17",
+ "file": "TOEIC800_News_2026-11-17.docx",
+ "driveId": "1CYUoISsu9jIgDbplw5-QWEGV3bn2l5Ah",
+ "modified": "3:57 am"
+}
