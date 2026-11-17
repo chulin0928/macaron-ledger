@@ -1,4 +1,28 @@
 /* 台股盤後雷達 — renders data/latest.json; the transcript tool runs fully client-side. */
+
+/* Login gate. Only a SHA-256 of "帳號:密碼" is stored here. To change the login, replace LOGIN_HASH
+   with the hash of the new "帳號:密碼". This keeps casual visitors out; it is not strong security. */
+(() => {
+  const LOGIN_HASH = 'e57a6ece45ee87e7eb76cec31704057d201a7285a9c682b5f1c68fe888a4fd6c';
+  const KEY = 'radar:auth';
+  const unlock = () => document.documentElement.classList.add('unlocked');
+  try { if (sessionStorage.getItem(KEY) === LOGIN_HASH) unlock(); } catch { /* storage blocked */ }
+  const form = document.getElementById('gate-form');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = document.getElementById('gate-user').value.trim() + ':' + document.getElementById('gate-pass').value;
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    const hex = Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, '0')).join('');
+    if (hex === LOGIN_HASH) {
+      try { sessionStorage.setItem(KEY, hex); } catch { /* storage blocked */ }
+      unlock();
+    } else {
+      document.getElementById('gate-err').hidden = false;
+      document.getElementById('gate-pass').value = '';
+    }
+  });
+})();
+
 (() => {
   'use strict';
   const $ = (s, el = document) => el.querySelector(s);

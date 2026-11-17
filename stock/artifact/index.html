@@ -231,8 +231,31 @@ mark { background: var(--warn-soft); color: var(--warn); padding: 0 2px; border-
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
+/* ---------- login gate */
+html:not(.unlocked) body > header, html:not(.unlocked) body > main, html:not(.unlocked) body > footer { display: none; }
+.gate { min-height: 100vh; display: grid; place-items: center; padding-block: 24px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+html.unlocked .gate { display: none; }
+.gate-card { width: min(360px, 100%); display: grid; gap: 8px; padding: 28px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.gate-card h1 { margin-bottom: 10px; }
+.gate-card label { font-size: 13px; color: var(--muted); }
+.gate-card input { font: inherit; padding: 9px 12px; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg); color: var(--fg); }
+.gate-card .btn { margin-top: 10px; }
+.gate-err { margin: 0; font-size: 13px; color: var(--up); }
+
 </style>
 
+<div id="gate" class="gate">
+  <form id="gate-form" class="gate-card" autocomplete="on">
+    <span class="mark" aria-hidden="true"></span>
+    <h1>台股盤後雷達</h1>
+    <label for="gate-user">帳號</label>
+    <input id="gate-user" name="username" autocomplete="username" required>
+    <label for="gate-pass">密碼</label>
+    <input id="gate-pass" name="password" type="password" autocomplete="current-password" required>
+    <p id="gate-err" class="gate-err" hidden>帳號或密碼不正確，請再試一次。</p>
+    <button class="btn primary" type="submit">登入</button>
+  </form>
+</div>
 <header class="top">
   <div class="wrap top-in">
     <div class="brand">
@@ -362,6 +385,30 @@ mark { background: var(--warn-soft); color: var(--warn); padding: 0 2px; border-
 
 <script>
 /* 台股盤後雷達 — renders data/latest.json; the transcript tool runs fully client-side. */
+
+/* Login gate. Only a SHA-256 of "帳號:密碼" is stored here. To change the login, replace LOGIN_HASH
+   with the hash of the new "帳號:密碼". This keeps casual visitors out; it is not strong security. */
+(() => {
+  const LOGIN_HASH = 'e57a6ece45ee87e7eb76cec31704057d201a7285a9c682b5f1c68fe888a4fd6c';
+  const KEY = 'radar:auth';
+  const unlock = () => document.documentElement.classList.add('unlocked');
+  try { if (sessionStorage.getItem(KEY) === LOGIN_HASH) unlock(); } catch { /* storage blocked */ }
+  const form = document.getElementById('gate-form');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = document.getElementById('gate-user').value.trim() + ':' + document.getElementById('gate-pass').value;
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    const hex = Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, '0')).join('');
+    if (hex === LOGIN_HASH) {
+      try { sessionStorage.setItem(KEY, hex); } catch { /* storage blocked */ }
+      unlock();
+    } else {
+      document.getElementById('gate-err').hidden = false;
+      document.getElementById('gate-pass').value = '';
+    }
+  });
+})();
+
 (() => {
   'use strict';
   const $ = (s, el = document) => el.querySelector(s);
