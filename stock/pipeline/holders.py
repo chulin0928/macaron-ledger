@@ -65,6 +65,17 @@ def tdcc_dates():
 
 
 def tdcc_week(code: str, day: str):
+    """One stock, one week; retries once with a fresh form if the reply has no table."""
+    global _token
+    for _ in range(2):
+        v = _tdcc_week(code, day)
+        if v:
+            return v
+        _token = None
+    return None
+
+
+def _tdcc_week(code: str, day: str):
     """One stock, one week (YYYYMMDD) from the TDCC query page."""
     from lxml import html
 
@@ -78,6 +89,9 @@ def tdcc_week(code: str, day: str):
         time.sleep(wait)
     S._last_call[host] = time.time()
     r = S.SESSION.post(TDCC_QUERY, data=form, timeout=40)
+    global _token
+    nxt = re.search(r'name="SYNCHRONIZER_TOKEN"[^>]*value="([^"]+)"', r.text)
+    _token = (nxt.group(1), dates) if nxt else None  # the token is single-use; the reply carries the next one
     doc = html.fromstring(r.text)
     levels = {}
     for tr in doc.xpath("//table//tr"):
