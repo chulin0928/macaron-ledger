@@ -332,6 +332,40 @@
     const up = v.at(-1) >= v[0];
     return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><path d="${pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('')}" fill="none" stroke="${up ? 'var(--up)' : 'var(--down)'}" stroke-width="1.6"/><circle cx="${pts.at(-1)[0]}" cy="${pts.at(-1)[1]}" r="2.2" fill="${up ? 'var(--up)' : 'var(--down)'}"/></svg>`;
   }
+  function trendChart(labels, vals, color, unit) {
+    const pts = vals.map((v, i) => [i, v]).filter(([, v]) => v != null);
+    if (pts.length < 2) return '<p class="empty" style="padding:12px">資料累積中</p>';
+    const W = 300, H = 96, P = { l: 6, r: 44, t: 10, b: 18 };
+    const ys = pts.map(([, v]) => v), mn = Math.min(...ys), mx = Math.max(...ys), sp = (mx - mn) || 1;
+    const x = (i) => P.l + (i / (vals.length - 1)) * (W - P.l - P.r);
+    const y = (v) => P.t + (1 - (v - mn) / sp) * (H - P.t - P.b);
+    const d = pts.map(([i, v], k) => (k ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(v).toFixed(1)).join('');
+    const [li, lv] = pts.at(-1);
+    const lab = (s) => (s.length === 8 ? s.slice(4, 6) + '/' + s.slice(6) : s.slice(5).replace('-', '/'));
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="趨勢圖">
+      <line x1="${P.l}" x2="${W - P.r}" y1="${y(mx)}" y2="${y(mx)}" stroke="var(--line-soft)"/><line x1="${P.l}" x2="${W - P.r}" y1="${y(mn)}" y2="${y(mn)}" stroke="var(--line-soft)"/>
+      <path d="${d}L${x(li)},${H - P.b}L${x(pts[0][0])},${H - P.b}Z" fill="${color}" opacity=".08"/>
+      <path d="${d}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="${x(li)}" cy="${y(lv)}" r="3.5" fill="${color}" stroke="var(--surface)" stroke-width="1.5"/>
+      <text x="${W - P.r + 6}" y="${y(mx) + 4}">${fmt(mx, 2)}${unit}</text><text x="${W - P.r + 6}" y="${y(mn) + 4}">${fmt(mn, 2)}${unit}</text>
+      <text x="${P.l}" y="${H - 4}">${lab(labels[pts[0][0]])}</text><text x="${W - P.r}" y="${H - 4}" text-anchor="end">${lab(labels[li])}</text></svg>`;
+  }
+  function holdPanel(h) {
+    if (!h) return '';
+    const chg = (v, unit = ' 個百分點') => (v == null ? '<span class="mut">—</span>' : `<b class="${cls(v)}">${signed(v, 2)}</b>${unit}`);
+    const last = (a) => (a.length ? fmt(a.at(-1), 2) + '%' : '—');
+    return `<div class="hold">
+      <div class="card-h"><h3>持股結構趨勢</h3><span class="legend">大戶 = 400 張以上 · 散戶 = 50 張以下（集保每週）</span></div>
+      ${h.read.length ? `<ul class="hold-read">${h.read.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+      <div class="hold-grid">
+        <div class="hold-c"><div class="hold-t"><span>外資持股比例</span><b>${last(h.foreign)}</b></div>${trendChart(h.fdates, h.foreign, 'var(--accent)', '%')}
+          <p>近 20 日 ${chg(h.chg.f20)} · 近 60 日 ${chg(h.chg.f60)}</p></div>
+        <div class="hold-c"><div class="hold-t"><span>大戶持股（≥400 張）</span><b>${last(h.big)}</b></div>${trendChart(h.weeks, h.big, 'var(--up)', '%')}
+          <p>近 4 週 ${chg(h.chg.big4)} · 近 12 週 ${chg(h.chg.big12)} · 千張大戶 ${last(h.k1000)}</p></div>
+        <div class="hold-c"><div class="hold-t"><span>散戶持股（≤50 張）</span><b>${last(h.retail)}</b></div>${trendChart(h.weeks, h.retail, 'var(--down)', '%')}
+          <p>近 4 週 ${chg(h.chg.retail4)} · 近 12 週 ${chg(h.chg.retail12)} · 股東人數 4 週 ${chg(h.chg.holders4, ' 人')}</p></div>
+      </div></div>`;
+  }
   function renderChips() {
     $('#red-pct').textContent = DATA.config?.red_margin_pct ?? 20;
     const codes = DATA.chips_order || Object.keys(DATA.chips);
@@ -372,6 +406,7 @@
         <div><b class="${cls(c.mg10)}">${signed(c.mg10)}</b><span>融資 10 日增減（張）</span></div>
       </div>
       <div class="table-box"><table class="grid"><thead><tr><th>日期</th><th class="r">收盤</th><th class="r">外資</th><th class="r">投信</th><th class="r">自營商</th><th class="r">融資餘額</th><th class="r">融資增減</th><th>訊號</th></tr></thead><tbody>${rows}</tbody></table></div>
+      ${holdPanel(c.holders)}
       ${analogs || '<p class="foot-note">近十日沒有觸發需要對照歷史的訊號。</p>'}
       <p class="foot-note">單位：張。歷史對照用最近約半年的資料，「隔週回檔」指訊號日後第 5 個交易日收盤低於訊號日收盤。</p>`;
   }

@@ -12,7 +12,7 @@ import json
 import os
 from datetime import datetime, timedelta, timezone
 
-from . import analysis, forecast, sentiment, sources as S, store
+from . import analysis, forecast, holders, sentiment, sources as S, store
 from .store import DATA, load_json, save_json
 
 CONFIG = store.ROOT / "config.json"
@@ -193,6 +193,13 @@ def main():
     sources_tag = {c: ("自選" if c in cfg.get("watchlist", []) else "選股" if c in picks else "PTT熱門") for c in chip}
     for c in chip:
         chip[c]["src"] = sources_tag[c]
+    # 外資 / 大戶 / 散戶 持股比例趨勢
+    try:
+        hold = holders.update(DATA, list(chip), load_json, save_json, log)
+        for c, h in hold.items():
+            chip[c]["holders"] = h
+    except Exception as e:  # noqa: BLE001
+        log.append(f"持股結構更新失敗: {e}")
 
     # ---- 三面向預測 + 勝率驗證
     ser = forecast.build_series(days)
