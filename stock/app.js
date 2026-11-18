@@ -159,7 +159,7 @@
       <div class="wr-grid">
         <div class="wr"><span class="lbl">看漲勝率</span><span class="val ${bullEdge >= 0 ? 'up' : 'down'}">${pctTxt(B.bull.win)}</span><span class="cmp">隨機 ${pctTxt(B.base_up)} · ${fmt(B.bull.n)} 筆 · 平均 ${signed(B.bull.avg, 2)}%</span></div>
         <div class="wr"><span class="lbl">看跌勝率</span><span class="val ${bearEdge >= 0 ? 'up' : 'down'}">${pctTxt(B.bear.win)}</span><span class="cmp">隨機 ${pctTxt(baseDown)} · ${fmt(B.bear.n)} 筆 · 平均 ${signed(B.bear.avg, 2)}%</span></div>
-        <div class="wr"><span class="lbl">每日前 10 名 5 日報酬</span><span class="val ${cls(B.top10.avg - B.top10.market)}">${signed(B.top10.avg, 2)}%</span><span class="cmp">全市場平均 ${signed(B.top10.market, 2)}% · 贏大盤的天數 ${pctTxt(B.top10.beat)}</span></div>
+        <div class="wr"><span class="lbl">每日前 10 名 比大盤多賺</span><span class="val ${cls(B.top10.avg - B.top10.market)}">${signed(B.top10.avg - B.top10.market, 2)}%</span><span class="cmp">前 10 名 ${signed(B.top10.avg, 2)}% · 全市場 ${signed(B.top10.market, 2)}% · 贏大盤 ${pctTxt(B.top10.beat)} 的天數</span></div>
         <div class="wr"><span class="lbl">實際追蹤（上線後）</span><span class="val">${L.bull.n + L.bear.n ? pctTxt(L.bull.win) : '—'}</span><span class="cmp">${L.bull.n + L.bear.n ? '看漲勝率' : '等待第一批結果'}</span></div>
       </div>
       <div class="wr-cols">

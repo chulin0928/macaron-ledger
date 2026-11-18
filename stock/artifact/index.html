@@ -251,6 +251,36 @@ html.unlocked .gate { display: none; }
 .gate-ok { margin: 0; font-size: 13px; color: var(--down); }
 @media (max-width: 520px) { .acct { width: 100%; justify-content: flex-end; } }
 
+/* ---------- forecast */
+.verify { display: grid; gap: 12px; }
+.verdict { padding: 14px 18px; border-radius: var(--r); border: 1px solid var(--line); background: var(--surface); display: grid; gap: 4px; }
+.verdict.bad { border-color: var(--warn); background: var(--warn-soft); }
+.verdict.good { border-color: var(--down); background: var(--down-soft); }
+.verdict b.big { font-size: 17px; }
+.verdict p { margin: 0; font-size: 14px; max-width: 80ch; }
+.wr-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.wr { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; display: grid; gap: 2px; min-width: 0; }
+.wr .lbl { font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+.wr .val { font-family: var(--font-num); font-size: 28px; font-weight: 600; line-height: 1.2; }
+.wr .cmp { font-size: 12px; color: var(--muted); }
+.wr-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface); }
+.seg-b { font: inherit; font-size: 14px; padding: 6px 14px; border: 0; background: transparent; color: var(--muted); cursor: pointer; }
+.seg-b[aria-pressed="true"] { background: var(--fg); color: var(--surface); }
+#fc-q { flex: 1 1 200px; min-width: 0; font: inherit; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--fg); }
+.bar { display: inline-grid; grid-template-columns: 44px 36px; align-items: center; gap: 6px; }
+.bar i { position: relative; height: 8px; border-radius: 4px; background: var(--line-soft); overflow: hidden; }
+.bar i::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--line); }
+.bar i s { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+.bar span { font-family: var(--font-num); font-size: 12px; text-align: right; }
+.call { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.call.c1 { background: var(--up-soft); color: var(--up); }
+.call.c-1 { background: var(--down-soft); color: var(--down); }
+.call.c0 { background: var(--line-soft); color: var(--muted); }
+.why { white-space: normal !important; min-width: 220px; font-size: 13px; }
+.why .p { color: var(--up); } .why .n { color: var(--down); }
+@media (max-width: 860px) { .wr-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .wr-cols { grid-template-columns: minmax(0, 1fr); } }
+
 </style>
 
 <div id="gate" class="gate">
@@ -296,6 +326,7 @@ html.unlocked .gate { display: none; }
     </div>
     <nav class="tabs" role="tablist" aria-label="功能">
       <a href="#screener" role="tab" data-tab="screener">選股</a>
+      <a href="#forecast" role="tab" data-tab="forecast">預測</a>
       <a href="#sentiment" role="tab" data-tab="sentiment">PTT 情緒</a>
       <a href="#chips" role="tab" data-tab="chips">籌碼</a>
       <a href="#transcript" role="tab" data-tab="transcript">法說會</a>
@@ -333,6 +364,41 @@ html.unlocked .gate { display: none; }
       </table>
     </div>
     <p class="foot-note" id="scr-note"></p>
+  </section>
+
+  <!-- ============ 預測 ============ -->
+  <section id="tab-forecast" class="tab" hidden>
+    <div class="headline">
+      <div>
+        <h2>消息面 × 籌碼面 × 技術面</h2>
+        <p class="lede" id="fc-lede">三個面向各自打分（−100 到 +100），加權成綜合分數，預測未來 5 個交易日的漲跌，並用歷史資料驗證勝率。</p>
+      </div>
+    </div>
+
+    <div class="verify" id="fc-verify"></div>
+
+    <div class="controls">
+      <div class="seg" role="group" aria-label="預測篩選">
+        <button type="button" class="seg-b" data-call="all" aria-pressed="true">全部</button>
+        <button type="button" class="seg-b" data-call="1" aria-pressed="false">看漲</button>
+        <button type="button" class="seg-b" data-call="-1" aria-pressed="false">看跌</button>
+      </div>
+      <input type="search" id="fc-q" placeholder="搜尋代號或名稱" aria-label="搜尋預測">
+    </div>
+    <div class="table-box">
+      <table class="grid" id="fc-table">
+        <thead><tr><th>代號</th><th>名稱</th><th class="r">收盤</th><th>消息面</th><th>籌碼面</th><th>技術面</th><th class="r">綜合</th><th>預測</th><th>理由</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <details class="method">
+      <summary>怎麼算的</summary>
+      <p><b>消息面</b>：最新月營收年增率、營收成長是否加速、是否連 3 個月正成長，加上 PTT 對這檔的討論情緒。月營收在次月 11 日後才計入，避免用到當時還沒公布的資料。</p>
+      <p><b>籌碼面</b>：外資、投信近 5 日買賣超占成交量的比例、外資連續買賣天數、融資 5 日增減（散戶融資大增視為偏空）。</p>
+      <p><b>技術面</b>：距季線遠近、20 日線與季線的多空排列、20 日漲跌幅、20 日線斜率。</p>
+      <p><b>綜合</b> = 消息面 25% + 籌碼面 35% + 技術面 40%。綜合 ≥ +20 為看漲、≤ −20 為看跌。權重和門檻是事先決定的，沒有拿回測結果去調整，以免勝率看起來好看卻只是巧合。</p>
+      <p><b>勝率</b>：看漲後 5 個交易日收盤比當天高算贏，看跌則是收盤比當天低算贏。一定要和「隨機挑股」的上漲比例比較，才知道有沒有比亂猜好。</p>
+    </details>
   </section>
 
   <!-- ============ PTT 情緒 ============ -->
@@ -511,7 +577,7 @@ html.unlocked .gate { display: none; }
   let DATA = null;
 
   /* ---------------- tabs */
-  const TABS = ['screener', 'sentiment', 'chips', 'transcript'];
+  const TABS = ['screener', 'forecast', 'sentiment', 'chips', 'transcript'];
   function showTab() {
     const name = TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'screener';
     TABS.forEach((t) => {
@@ -544,8 +610,71 @@ html.unlocked .gate { display: none; }
     (d.log || []).forEach((l) => notes.push(l));
     if (notes.length) { const n = $('#notice'); n.hidden = false; n.innerHTML = notes.map(esc).join('<br>'); }
     renderScreener();
+    renderForecast();
     renderSentiment();
     renderChips();
+  }
+
+  /* ================================================================ 預測 */
+  const FC = { call: 'all' };
+  const pctTxt = (v) => (v == null ? '—' : fmt(v, 1) + '%');
+  function bar(v) {
+    const w = Math.min(50, Math.abs(v) / 2);
+    const side = v >= 0 ? `left:50%;width:${w}%;background:var(--up)` : `right:50%;width:${w}%;background:var(--down)`;
+    return `<span class="bar"><i><s style="${side}"></s></i><span class="${cls(v)}">${signed(v)}</span></span>`;
+  }
+  function renderForecast() {
+    const F = DATA.forecast;
+    if (!F) { $('#fc-verify').innerHTML = '<p class="empty">尚無預測資料</p>'; return; }
+    const B = F.backtest, L = F.live;
+    const baseDown = B.base_up == null ? null : Math.round((100 - B.base_up) * 10) / 10;
+    const bullEdge = B.bull.win - B.base_up, bearEdge = B.bear.win - baseDown;
+    const good = bullEdge > 2 && bearEdge > 2, bad = bullEdge < 0 && bearEdge < 0;
+    const verdict = good ? ['good', '回測結果：綜合預測比隨機挑股好。']
+      : bad ? ['bad', '回測結果：綜合預測沒有比隨機挑股好，看漲訊號反而更常下跌。請把它當參考，不要直接照著買賣。']
+      : ['', '回測結果：綜合預測和隨機挑股差不多，優勢不明顯。'];
+    const asp = { info: '消息面', chips: '籌碼面', tech: '技術面' };
+    const q = B.quintiles.map((x, i) => `<tr><td>${['最低 20%', '第 2 組', '第 3 組', '第 4 組', '最高 20%'][i]}</td><td class="r ${cls(x.avg)}">${signed(x.avg, 2)}%</td><td class="r">${pctTxt(x.up)}</td></tr>`).join('');
+    const liveTxt = L.bull.n + L.bear.n
+      ? `看漲勝率 <b>${pctTxt(L.bull.win)}</b>（${fmt(L.bull.n)} 筆）、看跌勝率 <b>${pctTxt(L.bear.win)}</b>（${fmt(L.bear.n)} 筆）、每日前 10 名上漲比例 <b>${pctTxt(L.top10.win)}</b>。`
+      : `從 ${esc((L.first_pred || F.date).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'))} 開始每天記錄預測，5 個交易日後自動對答案，結果會顯示在這裡。`;
+    $('#fc-verify').innerHTML = `
+      <div class="verdict ${verdict[0]}"><b class="big">${verdict[1]}</b>
+        <p>回測期間 ${esc(B.period[0])} 到 ${esc(B.period[1])}，共 ${B.days} 個交易日、${fmt(B.samples)} 筆個股預測。這段期間隨機挑一檔，5 天後上漲的機率是 ${pctTxt(B.base_up)}。</p></div>
+      <div class="wr-grid">
+        <div class="wr"><span class="lbl">看漲勝率</span><span class="val ${bullEdge >= 0 ? 'up' : 'down'}">${pctTxt(B.bull.win)}</span><span class="cmp">隨機 ${pctTxt(B.base_up)} · ${fmt(B.bull.n)} 筆 · 平均 ${signed(B.bull.avg, 2)}%</span></div>
+        <div class="wr"><span class="lbl">看跌勝率</span><span class="val ${bearEdge >= 0 ? 'up' : 'down'}">${pctTxt(B.bear.win)}</span><span class="cmp">隨機 ${pctTxt(baseDown)} · ${fmt(B.bear.n)} 筆 · 平均 ${signed(B.bear.avg, 2)}%</span></div>
+        <div class="wr"><span class="lbl">每日前 10 名 比大盤多賺</span><span class="val ${cls(B.top10.avg - B.top10.market)}">${signed(B.top10.avg - B.top10.market, 2)}%</span><span class="cmp">前 10 名 ${signed(B.top10.avg, 2)}% · 全市場 ${signed(B.top10.market, 2)}% · 贏大盤 ${pctTxt(B.top10.beat)} 的天數</span></div>
+        <div class="wr"><span class="lbl">實際追蹤（上線後）</span><span class="val">${L.bull.n + L.bear.n ? pctTxt(L.bull.win) : '—'}</span><span class="cmp">${L.bull.n + L.bear.n ? '看漲勝率' : '等待第一批結果'}</span></div>
+      </div>
+      <div class="wr-cols">
+        <div class="table-box"><table class="grid"><thead><tr><th>單一面向</th><th class="r">看漲勝率</th><th class="r">看跌勝率</th></tr></thead><tbody>
+          ${Object.entries(B.aspects).map(([k, v]) => `<tr><td>${asp[k]}</td><td class="r ${v.bull.win >= B.base_up ? 'up' : 'down'}">${pctTxt(v.bull.win)}</td><td class="r ${v.bear.win >= baseDown ? 'up' : 'down'}">${pctTxt(v.bear.win)}</td></tr>`).join('')}
+          <tr><td class="mut">隨機挑股</td><td class="r mut">${pctTxt(B.base_up)}</td><td class="r mut">${pctTxt(baseDown)}</td></tr></tbody></table></div>
+        <div class="table-box"><table class="grid"><thead><tr><th>依綜合分數分 5 組</th><th class="r">5 日平均報酬</th><th class="r">上漲比例</th></tr></thead><tbody>${q}</tbody></table></div>
+      </div>
+      <p class="foot-note">實際追蹤：${liveTxt} 勝率數字標紅代表比隨機好、標綠代表比隨機差。</p>`;
+    document.querySelectorAll('.seg-b').forEach((b) => b.addEventListener('click', () => {
+      FC.call = b.dataset.call;
+      document.querySelectorAll('.seg-b').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      drawForecast();
+    }));
+    $('#fc-q').addEventListener('input', drawForecast);
+    drawForecast();
+  }
+  function drawForecast() {
+    const F = DATA.forecast, q = $('#fc-q').value.trim();
+    let rows = F.rows.filter((r) => (FC.call === 'all' || String(r.call) === FC.call) && (!q || (r.code + r.name).includes(q)));
+    if (FC.call === '-1') rows = rows.slice().reverse();
+    const lab = { 1: '看漲', '-1': '看跌', 0: '中性' };
+    $('#fc-table tbody').innerHTML = rows.length ? rows.slice(0, 300).map((r) => `<tr>
+      <td><a class="code" href="https://tw.stock.yahoo.com/quote/${r.code}" target="_blank" rel="noopener">${r.code}</a></td>
+      <td>${esc(r.name)}</td><td class="r">${fmt(r.close, 2)}</td>
+      <td>${bar(r.info)}</td><td>${bar(r.chips)}</td><td>${bar(r.tech)}</td>
+      <td class="r ${cls(r.total)}"><b>${signed(r.total)}</b></td>
+      <td><span class="call c${r.call}">${lab[r.call]}</span></td>
+      <td class="why">${r.pos.map((t) => `<span class="p">▲ ${esc(t)}</span>`).join(' ')} ${r.neg.map((t) => `<span class="n">▼ ${esc(t)}</span>`).join(' ')}</td></tr>`).join('')
+      : '<tr><td colspan="9" class="empty">沒有符合的個股</td></tr>';
   }
 
   /* ================================================================ 選股 */
