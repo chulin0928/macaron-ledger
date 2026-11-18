@@ -387,7 +387,7 @@ html.unlocked .gate { display: none; }
     </div>
     <div class="table-box">
       <table class="grid" id="fc-table">
-        <thead><tr><th>代號</th><th>名稱</th><th class="r">收盤</th><th>消息面</th><th>籌碼面</th><th>技術面</th><th class="r">綜合</th><th>預測</th><th>理由</th></tr></thead>
+        <thead><tr><th>代號</th><th>名稱</th><th class="r">收盤</th><th>消息面</th><th>籌碼面</th><th>技術面</th><th>短線反轉</th><th class="r">綜合</th><th>預測</th><th>理由</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -396,7 +396,9 @@ html.unlocked .gate { display: none; }
       <p><b>消息面</b>：最新月營收年增率、營收成長是否加速、是否連 3 個月正成長，加上 PTT 對這檔的討論情緒。月營收在次月 11 日後才計入，避免用到當時還沒公布的資料。</p>
       <p><b>籌碼面</b>：外資、投信近 5 日買賣超占成交量的比例、外資連續買賣天數、融資 5 日增減（散戶融資大增視為偏空）。</p>
       <p><b>技術面</b>：距季線遠近、20 日線與季線的多空排列、20 日漲跌幅、20 日線斜率。</p>
-      <p><b>綜合</b> = 消息面 25% + 籌碼面 35% + 技術面 40%。綜合 ≥ +20 為看漲、≤ −20 為看跌。權重和門檻是事先決定的，沒有拿回測結果去調整，以免勝率看起來好看卻只是巧合。</p>
+      <p><b>短線反轉</b>：近 5 日、20 日跌越多、RSI 越低分數越高（短線超跌可能反彈），漲越多分數越低。</p>
+      <p><b>四種模型</b>事先寫好權重：原始（消息 25% + 籌碼 35% + 技術 40%）、籌碼＋消息＋短線反轉、消息＋短線反轉、純短線反轉。綜合 ≥ +20 為看漲、≤ −20 為看跌。</p>
+      <p><b>公平驗證</b>：歷史資料切成前後兩半。前半段用來設計，後半段完全不拿來挑模型，只用來對答案。只有前後兩段都贏過隨機挑股的模型才會被採用；都沒有的話就用原始模型，並清楚標示「目前沒有可靠模型」。</p>
       <p><b>勝率</b>：看漲後 5 個交易日收盤比當天高算贏，看跌則是收盤比當天低算贏。一定要和「隨機挑股」的上漲比例比較，才知道有沒有比亂猜好。</p>
     </details>
   </section>
@@ -625,35 +627,38 @@ html.unlocked .gate { display: none; }
   }
   function renderForecast() {
     const F = DATA.forecast;
-    if (!F) { $('#fc-verify').innerHTML = '<p class="empty">尚無預測資料</p>'; return; }
-    const B = F.backtest, L = F.live;
-    const baseDown = B.base_up == null ? null : Math.round((100 - B.base_up) * 10) / 10;
-    const bullEdge = B.bull.win - B.base_up, bearEdge = B.bear.win - baseDown;
-    const good = bullEdge > 2 && bearEdge > 2, bad = bullEdge < 0 && bearEdge < 0;
-    const verdict = good ? ['good', '回測結果：綜合預測比隨機挑股好。']
-      : bad ? ['bad', '回測結果：綜合預測沒有比隨機挑股好，看漲訊號反而更常下跌。請把它當參考，不要直接照著買賣。']
-      : ['', '回測結果：綜合預測和隨機挑股差不多，優勢不明顯。'];
-    const asp = { info: '消息面', chips: '籌碼面', tech: '技術面' };
-    const q = B.quintiles.map((x, i) => `<tr><td>${['最低 20%', '第 2 組', '第 3 組', '第 4 組', '最高 20%'][i]}</td><td class="r ${cls(x.avg)}">${signed(x.avg, 2)}%</td><td class="r">${pctTxt(x.up)}</td></tr>`).join('');
-    const liveTxt = L.bull.n + L.bear.n
+    if (!F || !F.backtest) { $('#fc-verify').innerHTML = '<p class="empty">尚無預測資料</p>'; return; }
+    const B = F.backtest, L = F.live, M = B.models, key = B.chosen, T = M[key].test;
+    const base = T.base_up, baseDown = base == null ? null : Math.round((100 - base) * 10) / 10;
+    const verdict = B.reliable
+      ? ['good', `採用「${esc(M[key].label)}」：前後兩段資料都贏過隨機挑股。`]
+      : ['bad', '目前沒有可靠的預測模型：四種模型都沒有在前後兩段資料同時贏過隨機挑股。下面的看漲／看跌只能當參考，不要直接照著買賣。'];
+    const edgeCell = (e) => (e == null ? '<td class="r mut">—</td>' : `<td class="r ${e > 0 ? 'up' : 'down'}">${signed(e, 1)}</td>`);
+    const models = Object.entries(M).map(([k, m]) => `<tr${k === key ? ' style="font-weight:700"' : ''}><td>${esc(m.label)}${k === key ? ' <span class="tag src">使用中</span>' : ''}</td>
+      ${edgeCell(m.train.edge)}<td class="r">${pctTxt(m.test.bull.win)}</td><td class="r">${pctTxt(m.test.bear.win)}</td>${edgeCell(m.test.edge)}</tr>`).join('');
+    const asp = { info: '消息面', chips: '籌碼面', tech: '技術面', rev: '短線反轉' };
+    const q = T.quintiles.map((x, i) => `<tr><td>${['最低 20%', '第 2 組', '第 3 組', '第 4 組', '最高 20%'][i]}</td><td class="r ${cls(x.avg)}">${signed(x.avg, 2)}%</td><td class="r">${pctTxt(x.up)}</td></tr>`).join('');
+    const liveN = L.bull.n + L.bear.n;
+    const liveTxt = liveN
       ? `看漲勝率 <b>${pctTxt(L.bull.win)}</b>（${fmt(L.bull.n)} 筆）、看跌勝率 <b>${pctTxt(L.bear.win)}</b>（${fmt(L.bear.n)} 筆）、每日前 10 名上漲比例 <b>${pctTxt(L.top10.win)}</b>。`
-      : `從 ${esc((L.first_pred || F.date).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'))} 開始每天記錄預測，5 個交易日後自動對答案，結果會顯示在這裡。`;
+      : `從 ${esc((L.first_pred || F.date).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'))} 開始每天記錄預測，5 個交易日後自動對答案。`;
     $('#fc-verify').innerHTML = `
       <div class="verdict ${verdict[0]}"><b class="big">${verdict[1]}</b>
-        <p>回測期間 ${esc(B.period[0])} 到 ${esc(B.period[1])}，共 ${B.days} 個交易日、${fmt(B.samples)} 筆個股預測。這段期間隨機挑一檔，5 天後上漲的機率是 ${pctTxt(B.base_up)}。</p></div>
+        <p>設計期 ${esc(B.train_period[0])} 到 ${esc(B.train_period[1])}（大盤偏多），驗證期 ${esc(B.test_period[0])} 到 ${esc(B.test_period[1])}（大盤偏空）。驗證期隨機挑一檔，5 天後上漲的機率是 ${pctTxt(base)}。</p></div>
       <div class="wr-grid">
-        <div class="wr"><span class="lbl">看漲勝率</span><span class="val ${bullEdge >= 0 ? 'up' : 'down'}">${pctTxt(B.bull.win)}</span><span class="cmp">隨機 ${pctTxt(B.base_up)} · ${fmt(B.bull.n)} 筆 · 平均 ${signed(B.bull.avg, 2)}%</span></div>
-        <div class="wr"><span class="lbl">看跌勝率</span><span class="val ${bearEdge >= 0 ? 'up' : 'down'}">${pctTxt(B.bear.win)}</span><span class="cmp">隨機 ${pctTxt(baseDown)} · ${fmt(B.bear.n)} 筆 · 平均 ${signed(B.bear.avg, 2)}%</span></div>
-        <div class="wr"><span class="lbl">每日前 10 名 比大盤多賺</span><span class="val ${cls(B.top10.avg - B.top10.market)}">${signed(B.top10.avg - B.top10.market, 2)}%</span><span class="cmp">前 10 名 ${signed(B.top10.avg, 2)}% · 全市場 ${signed(B.top10.market, 2)}% · 贏大盤 ${pctTxt(B.top10.beat)} 的天數</span></div>
-        <div class="wr"><span class="lbl">實際追蹤（上線後）</span><span class="val">${L.bull.n + L.bear.n ? pctTxt(L.bull.win) : '—'}</span><span class="cmp">${L.bull.n + L.bear.n ? '看漲勝率' : '等待第一批結果'}</span></div>
+        <div class="wr"><span class="lbl">看漲勝率（驗證期）</span><span class="val ${T.bull.win >= base ? 'up' : 'down'}">${pctTxt(T.bull.win)}</span><span class="cmp">隨機 ${pctTxt(base)} · ${fmt(T.bull.n)} 筆</span></div>
+        <div class="wr"><span class="lbl">看跌勝率（驗證期）</span><span class="val ${T.bear.win >= baseDown ? 'up' : 'down'}">${pctTxt(T.bear.win)}</span><span class="cmp">隨機 ${pctTxt(baseDown)} · ${fmt(T.bear.n)} 筆</span></div>
+        <div class="wr"><span class="lbl">每日前 10 名 比大盤多賺</span><span class="val ${cls(T.top10.avg - T.top10.market)}">${signed(T.top10.avg - T.top10.market, 2)}%</span><span class="cmp">前 10 名 ${signed(T.top10.avg, 2)}% · 全市場 ${signed(T.top10.market, 2)}%</span></div>
+        <div class="wr"><span class="lbl">實際追蹤（上線後）</span><span class="val">${liveN ? pctTxt(L.bull.win) : '—'}</span><span class="cmp">${liveN ? '看漲勝率' : '等待第一批結果'}</span></div>
       </div>
+      <div class="table-box"><table class="grid"><thead><tr><th>模型</th><th class="r">設計期 贏隨機</th><th class="r">驗證期 看漲勝率</th><th class="r">驗證期 看跌勝率</th><th class="r">驗證期 贏隨機</th></tr></thead><tbody>${models}</tbody></table></div>
       <div class="wr-cols">
-        <div class="table-box"><table class="grid"><thead><tr><th>單一面向</th><th class="r">看漲勝率</th><th class="r">看跌勝率</th></tr></thead><tbody>
-          ${Object.entries(B.aspects).map(([k, v]) => `<tr><td>${asp[k]}</td><td class="r ${v.bull.win >= B.base_up ? 'up' : 'down'}">${pctTxt(v.bull.win)}</td><td class="r ${v.bear.win >= baseDown ? 'up' : 'down'}">${pctTxt(v.bear.win)}</td></tr>`).join('')}
-          <tr><td class="mut">隨機挑股</td><td class="r mut">${pctTxt(B.base_up)}</td><td class="r mut">${pctTxt(baseDown)}</td></tr></tbody></table></div>
-        <div class="table-box"><table class="grid"><thead><tr><th>依綜合分數分 5 組</th><th class="r">5 日平均報酬</th><th class="r">上漲比例</th></tr></thead><tbody>${q}</tbody></table></div>
+        <div class="table-box"><table class="grid"><thead><tr><th>單一面向（驗證期）</th><th class="r">看漲勝率</th><th class="r">看跌勝率</th></tr></thead><tbody>
+          ${Object.entries(B.aspects).map(([k, v]) => `<tr><td>${asp[k]}</td><td class="r ${v.bull.win >= base ? 'up' : 'down'}">${pctTxt(v.bull.win)}</td><td class="r ${v.bear.win >= baseDown ? 'up' : 'down'}">${pctTxt(v.bear.win)}</td></tr>`).join('')}
+          <tr><td class="mut">隨機挑股</td><td class="r mut">${pctTxt(base)}</td><td class="r mut">${pctTxt(baseDown)}</td></tr></tbody></table></div>
+        <div class="table-box"><table class="grid"><thead><tr><th>依綜合分數分 5 組（驗證期）</th><th class="r">5 日平均報酬</th><th class="r">上漲比例</th></tr></thead><tbody>${q}</tbody></table></div>
       </div>
-      <p class="foot-note">實際追蹤：${liveTxt} 勝率數字標紅代表比隨機好、標綠代表比隨機差。</p>`;
+      <p class="foot-note">「贏隨機」= 看漲勝率比隨機多幾個百分點 ＋ 看跌勝率比隨機多幾個百分點，正數代表比亂猜好。實際追蹤：${liveTxt}</p>`;
     document.querySelectorAll('.seg-b').forEach((b) => b.addEventListener('click', () => {
       FC.call = b.dataset.call;
       document.querySelectorAll('.seg-b').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
@@ -670,11 +675,11 @@ html.unlocked .gate { display: none; }
     $('#fc-table tbody').innerHTML = rows.length ? rows.slice(0, 300).map((r) => `<tr>
       <td><a class="code" href="https://tw.stock.yahoo.com/quote/${r.code}" target="_blank" rel="noopener">${r.code}</a></td>
       <td>${esc(r.name)}</td><td class="r">${fmt(r.close, 2)}</td>
-      <td>${bar(r.info)}</td><td>${bar(r.chips)}</td><td>${bar(r.tech)}</td>
+      <td>${bar(r.info)}</td><td>${bar(r.chips)}</td><td>${bar(r.tech)}</td><td>${bar(r.rev ?? 0)}</td>
       <td class="r ${cls(r.total)}"><b>${signed(r.total)}</b></td>
       <td><span class="call c${r.call}">${lab[r.call]}</span></td>
       <td class="why">${r.pos.map((t) => `<span class="p">▲ ${esc(t)}</span>`).join(' ')} ${r.neg.map((t) => `<span class="n">▼ ${esc(t)}</span>`).join(' ')}</td></tr>`).join('')
-      : '<tr><td colspan="9" class="empty">沒有符合的個股</td></tr>';
+      : '<tr><td colspan="10" class="empty">沒有符合的個股</td></tr>';
   }
 
   /* ================================================================ 選股 */

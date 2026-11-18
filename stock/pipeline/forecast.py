@@ -112,6 +112,22 @@ def score(cols, i, rev_months, revenue, code, ptt=None):
     note(mom, f"20 日漲 {(c / c20 - 1) * 100:.1f}%", f"20 日跌 {(c / c20 - 1) * 100:.1f}%")
     rsi = _rsi(win60)
 
+    # ---------------- 短線反轉 (5-day horizon: recent losers tend to bounce, recent winners to cool off)
+    c5 = close[i - 5] or c
+    r5 = clip(-(c / c5 - 1) / 0.08)
+    r20 = clip(-(c / c20 - 1) / 0.15)
+    rr = clip((50 - rsi) / 30)
+    rev = mean([r5, r20, rr])
+    rnotes = []
+    if r5 >= 0.35:
+        rnotes.append((r5, f"5 日跌 {(c / c5 - 1) * 100:.1f}%，短線超跌"))
+    elif r5 <= -0.35:
+        rnotes.append((r5, f"5 日漲 {(c / c5 - 1) * 100:.1f}%，短線過熱"))
+    if rsi <= 30:
+        rnotes.append((0.5, f"RSI {rsi:.0f} 超賣"))
+    elif rsi >= 70:
+        rnotes.append((-0.5, f"RSI {rsi:.0f} 超買"))
+
     # ---------------- 籌碼面
     f5 = sum(x for x in fi[i - 4:i + 1] if x is not None)
     t5 = sum(x for x in it[i - 4:i + 1] if x is not None)
@@ -159,79 +175,131 @@ def score(cols, i, rev_months, revenue, code, ptt=None):
         note(ps, f"PTT 討論偏多（{ptt.get('n', 0)} 篇）", f"PTT 討論偏空（{ptt.get('n', 0)} 篇）")
     info = mean(info_parts) if info_parts else 0.0
 
-    total = W_INFO * info + W_CHIP * chips + W_TECH * tech
-    call = 1 if total >= CALL else -1 if total <= -CALL else 0
-    pos.sort(key=lambda x: -x[0])
-    neg.sort(key=lambda x: x[0])
-    return {"info": info, "chips": chips, "tech": tech, "total": total, "call": call,
+    return {"info": info, "chips": chips, "tech": tech, "rev": rev,
             "close": c, "vol20": vol20, "rsi": rsi,
-            "pos": [t for _, t in pos[:3]], "neg": [t for _, t in neg[:3]]}
+            "notes": {"pos": pos, "neg": neg, "rev": rnotes}}
+
+
+# Candidate models, written down before looking at the test half. Weights over the aspects.
+MODELS = {
+    "trend": ("原始（順勢）", {"info": W_INFO, "chips": W_CHIP, "tech": W_TECH}),
+    "revert": ("籌碼＋消息＋短線反轉", {"info": 0.25, "chips": 0.35, "rev": 0.40}),
+    "revert_info": ("消息＋短線反轉", {"info": 0.5, "rev": 0.5}),
+    "pure_revert": ("純短線反轉", {"rev": 1.0}),
+}
+
+
+def total_of(s, model):
+    return sum(w * s[k] for k, w in MODELS[model][1].items())
+
+
+def reasons(s, model):
+    """Up to 3 bullish and 3 bearish reasons, drawn from the aspects this model uses."""
+    used = MODELS[model][1]
+    pos = list(s["notes"]["pos"]) if any(k in used for k in ("info", "chips", "tech")) else []
+    neg = list(s["notes"]["neg"]) if pos or any(k in used for k in ("info", "chips", "tech")) else []
+    if "tech" not in used:  # trend phrases don't apply when the model reads price action as reversal
+        drop = ("季線", "均線", "20 日")
+        pos = [x for x in pos if not any(d in x[1] for d in drop)]
+        neg = [x for x in neg if not any(d in x[1] for d in drop)]
+    if "rev" in used:
+        for v, t in s["notes"]["rev"]:
+            (pos if v > 0 else neg).append((abs(v), t))
+    pos.sort(key=lambda x: -abs(x[0]))
+    neg.sort(key=lambda x: -abs(x[0]))
+    return [t for _, t in pos[:3]], [t for _, t in neg[:3]]
 
 
 def _rate(wins, n):
     return round(100 * wins / n, 1) if n else None
 
 
+def _stats(entries, model):
+    """entries: list of (day_index, aspects, ret). Win rates for one model."""
+    n = up = 0
+    rets = []
+    bull = [0, 0, []]
+    bear = [0, 0, []]
+    by_day = {}
+    for d, s, r in entries:
+        t = total_of(s, model)
+        n += 1; up += r > 0; rets.append(r)
+        if t >= CALL:
+            bull[0] += 1; bull[1] += r > 0; bull[2].append(r)
+        elif t <= -CALL:
+            bear[0] += 1; bear[1] += r < 0; bear[2].append(r)
+        by_day.setdefault(d, []).append((t, r))
+    buckets = [[] for _ in range(5)]
+    top = []
+    for rows in by_day.values():
+        rows.sort(key=lambda x: x[0])
+        for q in range(5):
+            buckets[q].extend(r for _, r in rows[q * len(rows) // 5:(q + 1) * len(rows) // 5])
+        t10 = rows[-10:]
+        top.append((mean(r for _, r in t10), mean(r for _, r in rows)))
+    pct = lambda xs: round(mean(xs) * 100, 2) if xs else None  # noqa: E731
+    base_up = _rate(up, n)
+    out = {
+        "days": len(by_day), "samples": n, "base_up": base_up, "base_avg": pct(rets),
+        "bull": {"n": bull[0], "win": _rate(bull[1], bull[0]), "avg": pct(bull[2])},
+        "bear": {"n": bear[0], "win": _rate(bear[1], bear[0]), "avg": pct(bear[2])},
+        "quintiles": [{"avg": pct(b), "up": _rate(sum(1 for r in b if r > 0), len(b))} for b in buckets],
+        "top10": {"avg": pct([a for a, _ in top]), "market": pct([b for _, b in top]),
+                  "beat": _rate(sum(1 for a, b in top if a > b), len(top))},
+    }
+    ok = bull[0] >= 200 and bear[0] >= 200 and base_up is not None
+    out["edge"] = round((out["bull"]["win"] - base_up) + (out["bear"]["win"] - (100 - base_up)), 1) if ok else None
+    return out
+
+
 def backtest(days, ser, revenue):
+    """Score every liquid stock on every past day that has 5 trading days after it.
+    The older half picks the model; the newer half (never used for picking) reports its win rate."""
     n = len(days)
     dates = [date.fromisoformat(d["date"]) for d in days]
-    calls = {"bull": [0, 0, []], "bear": [0, 0, []]}
-    aspect = {k: {"bull": [0, 0], "bear": [0, 0]} for k in ("info", "chips", "tech")}
-    base_n = base_up = 0
-    base_ret = []
-    buckets = [[] for _ in range(5)]
-    top10 = []
-    first = last = None
+    entries = []
     for i in range(60, n - HORIZON):
         rev = revenue_available(revenue, dates[i])
-        day = []
         for code, cols in ser.items():
             s = score(cols, i, rev, revenue, code)
             if not s:
                 continue
             c5 = cols[C][i + HORIZON]
-            if not c5:
-                continue
-            r = c5 / s["close"] - 1
-            day.append((s, r))
-        if not day:
-            continue
-        first = first or days[i]["date"]
-        last = days[i]["date"]
-        for s, r in day:
-            base_n += 1
-            base_up += r > 0
-            base_ret.append(r)
-            if s["call"] == 1:
-                calls["bull"][0] += 1; calls["bull"][1] += r > 0; calls["bull"][2].append(r)
-            elif s["call"] == -1:
-                calls["bear"][0] += 1; calls["bear"][1] += r < 0; calls["bear"][2].append(r)
-            for k in aspect:
-                if s[k] >= ASPECT_CALL:
-                    aspect[k]["bull"][0] += 1; aspect[k]["bull"][1] += r > 0
-                elif s[k] <= -ASPECT_CALL:
-                    aspect[k]["bear"][0] += 1; aspect[k]["bear"][1] += r < 0
-        day.sort(key=lambda x: x[0]["total"])
-        for q in range(5):
-            part = day[q * len(day) // 5:(q + 1) * len(day) // 5]
-            buckets[q].extend(r for _, r in part)
-        top = day[-10:]
-        top10.append((mean(r for _, r in top), mean(r for _, r in day)))
-    pct = lambda xs: round(mean(xs) * 100, 2) if xs else None  # noqa: E731
+            if c5:
+                entries.append((i, s, c5 / s["close"] - 1))
+    idx = sorted({d for d, _, _ in entries})
+    if not idx:
+        return None
+    cut = idx[len(idx) // 2]
+    train = [e for e in entries if e[0] < cut]
+    test = [e for e in entries if e[0] >= cut]
+    models = {}
+    for key, (label, w) in MODELS.items():
+        models[key] = {"label": label, "weights": w, "train": _stats(train, key), "test": _stats(test, key)}
+    # Use a model only if it beat random in BOTH halves; otherwise keep the original and say no model is reliable.
+    edge = lambda k, part: models[k][part]["edge"] if models[k][part]["edge"] is not None else -1e9  # noqa: E731
+    passing = [k for k in models if edge(k, "train") > 0 and edge(k, "test") > 0]
+    chosen = max(passing, key=lambda k: edge(k, "train")) if passing else "trend"
+    reliable = chosen in passing and edge(chosen, "test") >= 3
+    # single-aspect check on the test half
+    aspects = {}
+    tb = _stats(test, "trend")["base_up"]
+    for k in ("info", "chips", "tech", "rev"):
+        b = [0, 0]; s_ = [0, 0]
+        for _, s, r in test:
+            if s[k] >= ASPECT_CALL:
+                b[0] += 1; b[1] += r > 0
+            elif s[k] <= -ASPECT_CALL:
+                s_[0] += 1; s_[1] += r < 0
+        aspects[k] = {"bull": {"n": b[0], "win": _rate(b[1], b[0])}, "bear": {"n": s_[0], "win": _rate(s_[1], s_[0])}}
     return {
-        "period": [first, last], "days": len(top10), "samples": base_n,
-        "base_up": _rate(base_up, base_n), "base_avg": pct(base_ret),
-        "bull": {"n": calls["bull"][0], "win": _rate(calls["bull"][1], calls["bull"][0]), "avg": pct(calls["bull"][2])},
-        "bear": {"n": calls["bear"][0], "win": _rate(calls["bear"][1], calls["bear"][0]), "avg": pct(calls["bear"][2])},
-        "aspects": {k: {"bull": {"n": v["bull"][0], "win": _rate(v["bull"][1], v["bull"][0])},
-                        "bear": {"n": v["bear"][0], "win": _rate(v["bear"][1], v["bear"][0])}} for k, v in aspect.items()},
-        "quintiles": [{"avg": pct(b), "up": _rate(sum(1 for r in b if r > 0), len(b))} for b in buckets],
-        "top10": {"avg": pct([a for a, _ in top10]), "market": pct([b for _, b in top10]),
-                  "beat": _rate(sum(1 for a, b in top10 if a > b), len(top10))},
+        "train_period": [days[idx[0]]["date"], days[cut - 1]["date"] if cut - 1 >= idx[0] else days[idx[0]]["date"]],
+        "test_period": [days[cut]["date"], days[idx[-1]]["date"]],
+        "models": models, "chosen": chosen, "reliable": reliable, "aspects": aspects, "test_base_up": tb,
     }
 
 
-def today(days, ser, revenue, names, ptt_stocks):
+def today(days, ser, revenue, names, ptt_stocks, model):
     i = len(days) - 1
     rev = revenue_available(revenue, date.fromisoformat(days[i]["date"]))
     rows = []
@@ -239,19 +307,22 @@ def today(days, ser, revenue, names, ptt_stocks):
         s = score(cols, i, rev, revenue, code, (ptt_stocks or {}).get(code))
         if not s:
             continue
+        t = total_of(s, model)
+        pos, neg = reasons(s, model)
         rows.append({"code": code, "name": names.get(code, ""), "close": s["close"],
                      "info": round(s["info"] * 100), "chips": round(s["chips"] * 100), "tech": round(s["tech"] * 100),
-                     "total": round(s["total"] * 100), "call": s["call"], "rsi": round(s["rsi"]),
-                     "pos": s["pos"], "neg": s["neg"]})
+                     "rev": round(s["rev"] * 100), "total": round(t * 100),
+                     "call": 1 if t >= CALL else -1 if t <= -CALL else 0, "rsi": round(s["rsi"]),
+                     "pos": pos, "neg": neg})
     rows.sort(key=lambda r: -r["total"])
     return rows
 
 
-def track(pred_dir, days, rows, save_json, load_json):
+def track(pred_dir, days, rows, save_json, load_json, model=None):
     """Save today's calls; check earlier calls whose 5 trading days have passed."""
     trade_date = days[-1]["date"]
     save_json(pred_dir / f"{trade_date.replace('-', '')}.json",
-              {"date": trade_date, "calls": {r["code"]: [r["total"], r["call"], r["close"]] for r in rows if r["call"]},
+              {"date": trade_date, "model": model, "calls": {r["code"]: [r["total"], r["call"], r["close"]] for r in rows if r["call"]},
                "top10": [r["code"] for r in rows[:10]]})
     idx = {d["date"]: i for i, d in enumerate(days)}
     stats = {"bull": [0, 0], "bear": [0, 0], "top10": [0, 0]}
