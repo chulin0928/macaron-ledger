@@ -352,7 +352,7 @@
   }
   function holdPanel(h) {
     if (!h) return '';
-    const chg = (v, unit = ' 個百分點') => (v == null ? '<span class="mut">—</span>' : `<b class="${cls(v)}">${signed(v, 2)}</b>${unit}`);
+    const chg = (v, unit = ' 個百分點', d = 2) => (v == null ? '<span class="mut">—</span>' : `<b class="${cls(v)}">${signed(v, d)}</b>${unit}`);
     const last = (a) => (a.length ? fmt(a.at(-1), 2) + '%' : '—');
     return `<div class="hold">
       <div class="card-h"><h3>持股結構趨勢</h3><span class="legend">大戶 = 400 張以上 · 散戶 = 50 張以下（集保每週）</span></div>
@@ -363,7 +363,7 @@
         <div class="hold-c"><div class="hold-t"><span>大戶持股（≥400 張）</span><b>${last(h.big)}</b></div>${trendChart(h.weeks, h.big, 'var(--up)', '%')}
           <p>近 4 週 ${chg(h.chg.big4)} · 近 12 週 ${chg(h.chg.big12)} · 千張大戶 ${last(h.k1000)}</p></div>
         <div class="hold-c"><div class="hold-t"><span>散戶持股（≤50 張）</span><b>${last(h.retail)}</b></div>${trendChart(h.weeks, h.retail, 'var(--down)', '%')}
-          <p>近 4 週 ${chg(h.chg.retail4)} · 近 12 週 ${chg(h.chg.retail12)} · 股東人數 4 週 ${chg(h.chg.holders4, ' 人')}</p></div>
+          <p>近 4 週 ${chg(h.chg.retail4)} · 近 12 週 ${chg(h.chg.retail12)} · 股東人數 4 週 ${chg(h.chg.holders4, ' 人', 0)}</p></div>
       </div></div>`;
   }
   function renderChips() {

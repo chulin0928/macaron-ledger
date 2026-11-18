@@ -213,7 +213,8 @@ mark { background: var(--warn-soft); color: var(--warn); padding: 0 2px; border-
 
 @media (max-width: 860px) {
   .sent-top, .chip-layout, .cols3, .tx-inputs, .lex-grid { grid-template-columns: minmax(0, 1fr); }
-  .chip-list { max-height: none; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .chip-list { max-height: none; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+  .chip-list .chip-item { flex: 0 0 240px; scroll-snap-align: start; }
   h2 { font-size: 20px; }
   .g-num { font-size: 52px; }
 }
