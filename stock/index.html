@@ -57,6 +57,7 @@
     </div>
     <nav class="tabs" role="tablist" aria-label="功能">
       <a href="#screener" role="tab" data-tab="screener">選股</a>
+      <a href="#forecast" role="tab" data-tab="forecast">預測</a>
       <a href="#sentiment" role="tab" data-tab="sentiment">PTT 情緒</a>
       <a href="#chips" role="tab" data-tab="chips">籌碼</a>
       <a href="#transcript" role="tab" data-tab="transcript">法說會</a>
@@ -94,6 +95,41 @@
       </table>
     </div>
     <p class="foot-note" id="scr-note"></p>
+  </section>
+
+  <!-- ============ 預測 ============ -->
+  <section id="tab-forecast" class="tab" hidden>
+    <div class="headline">
+      <div>
+        <h2>消息面 × 籌碼面 × 技術面</h2>
+        <p class="lede" id="fc-lede">三個面向各自打分（−100 到 +100），加權成綜合分數，預測未來 5 個交易日的漲跌，並用歷史資料驗證勝率。</p>
+      </div>
+    </div>
+
+    <div class="verify" id="fc-verify"></div>
+
+    <div class="controls">
+      <div class="seg" role="group" aria-label="預測篩選">
+        <button type="button" class="seg-b" data-call="all" aria-pressed="true">全部</button>
+        <button type="button" class="seg-b" data-call="1" aria-pressed="false">看漲</button>
+        <button type="button" class="seg-b" data-call="-1" aria-pressed="false">看跌</button>
+      </div>
+      <input type="search" id="fc-q" placeholder="搜尋代號或名稱" aria-label="搜尋預測">
+    </div>
+    <div class="table-box">
+      <table class="grid" id="fc-table">
+        <thead><tr><th>代號</th><th>名稱</th><th class="r">收盤</th><th>消息面</th><th>籌碼面</th><th>技術面</th><th class="r">綜合</th><th>預測</th><th>理由</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <details class="method">
+      <summary>怎麼算的</summary>
+      <p><b>消息面</b>：最新月營收年增率、營收成長是否加速、是否連 3 個月正成長，加上 PTT 對這檔的討論情緒。月營收在次月 11 日後才計入，避免用到當時還沒公布的資料。</p>
+      <p><b>籌碼面</b>：外資、投信近 5 日買賣超占成交量的比例、外資連續買賣天數、融資 5 日增減（散戶融資大增視為偏空）。</p>
+      <p><b>技術面</b>：距季線遠近、20 日線與季線的多空排列、20 日漲跌幅、20 日線斜率。</p>
+      <p><b>綜合</b> = 消息面 25% + 籌碼面 35% + 技術面 40%。綜合 ≥ +20 為看漲、≤ −20 為看跌。權重和門檻是事先決定的，沒有拿回測結果去調整，以免勝率看起來好看卻只是巧合。</p>
+      <p><b>勝率</b>：看漲後 5 個交易日收盤比當天高算贏，看跌則是收盤比當天低算贏。一定要和「隨機挑股」的上漲比例比較，才知道有沒有比亂猜好。</p>
+    </details>
   </section>
 
   <!-- ============ PTT 情緒 ============ -->

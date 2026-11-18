@@ -12,7 +12,7 @@ import json
 import os
 from datetime import datetime, timedelta, timezone
 
-from . import analysis, sentiment, sources as S, store
+from . import analysis, forecast, sentiment, sources as S, store
 from .store import DATA, load_json, save_json
 
 CONFIG = store.ROOT / "config.json"
@@ -194,6 +194,19 @@ def main():
     for c in chip:
         chip[c]["src"] = sources_tag[c]
 
+    # ---- 三面向預測 + 勝率驗證
+    ser = forecast.build_series(days)
+    rev_all = {p.stem: load_json(p, {}) for p in sorted((DATA / "revenue").glob("*.json"))}
+    fc_rows = forecast.today(days, ser, rev_all, names, (latest_sent or {}).get("stocks"))
+    fc = {
+        "date": days[-1]["date"], "horizon": forecast.HORIZON,
+        "weights": {"info": forecast.W_INFO, "chips": forecast.W_CHIP, "tech": forecast.W_TECH},
+        "threshold": round(forecast.CALL * 100),
+        "rows": fc_rows,
+        "backtest": forecast.backtest(days, ser, rev_all),
+        "live": forecast.track(DATA / "predictions", days, fc_rows, save_json, load_json),
+    }
+
     for s in series:
         s["zone"] = zone(s, cfg)
 
@@ -209,6 +222,7 @@ def main():
                       "series": [{k: s.get(k) for k in ("date", "index", "pct", "zone", "articles", "pushes", "G", "F")} for s in series[-180:]]},
         "chips": chip,
         "chips_order": list(chip),
+        "forecast": fc,
         "market": analysis.market(days),
     }
     save_json(DATA / "latest.json", out)
@@ -226,6 +240,9 @@ def main():
     write_csv(EXPORT / "chips.csv", ["代號", "名稱", "日期", "收盤", "外資", "投信", "自營商", "融資餘額", "融資增減%", "訊號"],
               [[c["code"], c["name"], t["date"], t["close"], t["fi"], t["it"], t["dl"], t["mg"], t["mg_chg"], " ".join(t["flags"])]
                for c in chip.values() for t in c["table"]])
+    write_csv(EXPORT / "forecast.csv", ["代號", "名稱", "收盤", "消息面", "籌碼面", "技術面", "綜合", "預測", "利多", "利空"],
+              [[r["code"], r["name"], r["close"], r["info"], r["chips"], r["tech"], r["total"],
+                {1: "看漲", -1: "看跌", 0: "中性"}[r["call"]], "、".join(r["pos"]), "、".join(r["neg"])] for r in fc_rows])
     write_csv(EXPORT / "sentiment.csv", ["日期", "恐懼貪婪指數", "歷史百分位", "區間", "文章數", "推文數", "貪婪分", "恐懼分"],
               [[s["date"], s.get("index"), s.get("pct"), s.get("zone"), s.get("articles"), s.get("pushes"), s.get("G"), s.get("F")] for s in series])
     print("done:", out["updated"], "trade_date", out["trade_date"], "screener rows", len(scr["rows"]), "chips", len(chip), "log", log)

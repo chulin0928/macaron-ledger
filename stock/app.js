@@ -92,7 +92,7 @@
   let DATA = null;
 
   /* ---------------- tabs */
-  const TABS = ['screener', 'sentiment', 'chips', 'transcript'];
+  const TABS = ['screener', 'forecast', 'sentiment', 'chips', 'transcript'];
   function showTab() {
     const name = TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'screener';
     TABS.forEach((t) => {
@@ -125,8 +125,71 @@
     (d.log || []).forEach((l) => notes.push(l));
     if (notes.length) { const n = $('#notice'); n.hidden = false; n.innerHTML = notes.map(esc).join('<br>'); }
     renderScreener();
+    renderForecast();
     renderSentiment();
     renderChips();
+  }
+
+  /* ================================================================ 預測 */
+  const FC = { call: 'all' };
+  const pctTxt = (v) => (v == null ? '—' : fmt(v, 1) + '%');
+  function bar(v) {
+    const w = Math.min(50, Math.abs(v) / 2);
+    const side = v >= 0 ? `left:50%;width:${w}%;background:var(--up)` : `right:50%;width:${w}%;background:var(--down)`;
+    return `<span class="bar"><i><s style="${side}"></s></i><span class="${cls(v)}">${signed(v)}</span></span>`;
+  }
+  function renderForecast() {
+    const F = DATA.forecast;
+    if (!F) { $('#fc-verify').innerHTML = '<p class="empty">尚無預測資料</p>'; return; }
+    const B = F.backtest, L = F.live;
+    const baseDown = B.base_up == null ? null : Math.round((100 - B.base_up) * 10) / 10;
+    const bullEdge = B.bull.win - B.base_up, bearEdge = B.bear.win - baseDown;
+    const good = bullEdge > 2 && bearEdge > 2, bad = bullEdge < 0 && bearEdge < 0;
+    const verdict = good ? ['good', '回測結果：綜合預測比隨機挑股好。']
+      : bad ? ['bad', '回測結果：綜合預測沒有比隨機挑股好，看漲訊號反而更常下跌。請把它當參考，不要直接照著買賣。']
+      : ['', '回測結果：綜合預測和隨機挑股差不多，優勢不明顯。'];
+    const asp = { info: '消息面', chips: '籌碼面', tech: '技術面' };
+    const q = B.quintiles.map((x, i) => `<tr><td>${['最低 20%', '第 2 組', '第 3 組', '第 4 組', '最高 20%'][i]}</td><td class="r ${cls(x.avg)}">${signed(x.avg, 2)}%</td><td class="r">${pctTxt(x.up)}</td></tr>`).join('');
+    const liveTxt = L.bull.n + L.bear.n
+      ? `看漲勝率 <b>${pctTxt(L.bull.win)}</b>（${fmt(L.bull.n)} 筆）、看跌勝率 <b>${pctTxt(L.bear.win)}</b>（${fmt(L.bear.n)} 筆）、每日前 10 名上漲比例 <b>${pctTxt(L.top10.win)}</b>。`
+      : `從 ${esc((L.first_pred || F.date).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'))} 開始每天記錄預測，5 個交易日後自動對答案，結果會顯示在這裡。`;
+    $('#fc-verify').innerHTML = `
+      <div class="verdict ${verdict[0]}"><b class="big">${verdict[1]}</b>
+        <p>回測期間 ${esc(B.period[0])} 到 ${esc(B.period[1])}，共 ${B.days} 個交易日、${fmt(B.samples)} 筆個股預測。這段期間隨機挑一檔，5 天後上漲的機率是 ${pctTxt(B.base_up)}。</p></div>
+      <div class="wr-grid">
+        <div class="wr"><span class="lbl">看漲勝率</span><span class="val ${bullEdge >= 0 ? 'up' : 'down'}">${pctTxt(B.bull.win)}</span><span class="cmp">隨機 ${pctTxt(B.base_up)} · ${fmt(B.bull.n)} 筆 · 平均 ${signed(B.bull.avg, 2)}%</span></div>
+        <div class="wr"><span class="lbl">看跌勝率</span><span class="val ${bearEdge >= 0 ? 'up' : 'down'}">${pctTxt(B.bear.win)}</span><span class="cmp">隨機 ${pctTxt(baseDown)} · ${fmt(B.bear.n)} 筆 · 平均 ${signed(B.bear.avg, 2)}%</span></div>
+        <div class="wr"><span class="lbl">每日前 10 名 5 日報酬</span><span class="val ${cls(B.top10.avg - B.top10.market)}">${signed(B.top10.avg, 2)}%</span><span class="cmp">全市場平均 ${signed(B.top10.market, 2)}% · 贏大盤的天數 ${pctTxt(B.top10.beat)}</span></div>
+        <div class="wr"><span class="lbl">實際追蹤（上線後）</span><span class="val">${L.bull.n + L.bear.n ? pctTxt(L.bull.win) : '—'}</span><span class="cmp">${L.bull.n + L.bear.n ? '看漲勝率' : '等待第一批結果'}</span></div>
+      </div>
+      <div class="wr-cols">
+        <div class="table-box"><table class="grid"><thead><tr><th>單一面向</th><th class="r">看漲勝率</th><th class="r">看跌勝率</th></tr></thead><tbody>
+          ${Object.entries(B.aspects).map(([k, v]) => `<tr><td>${asp[k]}</td><td class="r ${v.bull.win >= B.base_up ? 'up' : 'down'}">${pctTxt(v.bull.win)}</td><td class="r ${v.bear.win >= baseDown ? 'up' : 'down'}">${pctTxt(v.bear.win)}</td></tr>`).join('')}
+          <tr><td class="mut">隨機挑股</td><td class="r mut">${pctTxt(B.base_up)}</td><td class="r mut">${pctTxt(baseDown)}</td></tr></tbody></table></div>
+        <div class="table-box"><table class="grid"><thead><tr><th>依綜合分數分 5 組</th><th class="r">5 日平均報酬</th><th class="r">上漲比例</th></tr></thead><tbody>${q}</tbody></table></div>
+      </div>
+      <p class="foot-note">實際追蹤：${liveTxt} 勝率數字標紅代表比隨機好、標綠代表比隨機差。</p>`;
+    document.querySelectorAll('.seg-b').forEach((b) => b.addEventListener('click', () => {
+      FC.call = b.dataset.call;
+      document.querySelectorAll('.seg-b').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      drawForecast();
+    }));
+    $('#fc-q').addEventListener('input', drawForecast);
+    drawForecast();
+  }
+  function drawForecast() {
+    const F = DATA.forecast, q = $('#fc-q').value.trim();
+    let rows = F.rows.filter((r) => (FC.call === 'all' || String(r.call) === FC.call) && (!q || (r.code + r.name).includes(q)));
+    if (FC.call === '-1') rows = rows.slice().reverse();
+    const lab = { 1: '看漲', '-1': '看跌', 0: '中性' };
+    $('#fc-table tbody').innerHTML = rows.length ? rows.slice(0, 300).map((r) => `<tr>
+      <td><a class="code" href="https://tw.stock.yahoo.com/quote/${r.code}" target="_blank" rel="noopener">${r.code}</a></td>
+      <td>${esc(r.name)}</td><td class="r">${fmt(r.close, 2)}</td>
+      <td>${bar(r.info)}</td><td>${bar(r.chips)}</td><td>${bar(r.tech)}</td>
+      <td class="r ${cls(r.total)}"><b>${signed(r.total)}</b></td>
+      <td><span class="call c${r.call}">${lab[r.call]}</span></td>
+      <td class="why">${r.pos.map((t) => `<span class="p">▲ ${esc(t)}</span>`).join(' ')} ${r.neg.map((t) => `<span class="n">▼ ${esc(t)}</span>`).join(' ')}</td></tr>`).join('')
+      : '<tr><td colspan="9" class="empty">沒有符合的個股</td></tr>';
   }
 
   /* ================================================================ 選股 */
