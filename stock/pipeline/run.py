@@ -110,7 +110,11 @@ def update_sentiment(days_back, log):
         for summ in sentiment.run(days_back=days_back, names=load_json(DATA / "names.json", {})):
             save_json(pdir / f"{summ['date'].replace('-', '')}.json", summ)
     except Exception as e:  # noqa: BLE001
-        log.append(f"PTT 抓取失敗: {e}")
+        last = sorted(pdir.glob("*.json"))
+        when = last[-1].stem if last else ""
+        when = f"{when[:4]}-{when[4:6]}-{when[6:]}" if when else "上一次"
+        log.append(f"PTT 網站目前無法連線（PTT 伺服器故障或維修中），PTT 情緒暫時顯示 {when} 的資料，下次更新會自動再試。")
+        print("PTT error:", e)
     files = sorted(pdir.glob("*.json"))
     for p in files[:-400]:
         p.unlink()

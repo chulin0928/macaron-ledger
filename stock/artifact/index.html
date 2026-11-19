@@ -293,6 +293,7 @@ html.unlocked .gate { display: none; }
 .hold-t b { font-family: var(--font-num); font-size: 18px; color: var(--fg); }
 .hold-c p { margin: 0; font-size: 12px; color: var(--muted); }
 @media (max-width: 860px) { .hold-grid { grid-template-columns: minmax(0, 1fr); } }
+.hot .pb a.alt, a.alt { display: inline; color: var(--accent); font-size: 12px; white-space: nowrap; }
 
 </style>
 
@@ -778,7 +779,9 @@ html.unlocked .gate { display: none; }
     $('#w-fear').className = 'words f';
     $('#w-greed').innerHTML = (L.top_greed || []).map(([w, n]) => `<span>${esc(w)}<b>${n}</b></span>`).join('') || '<span class="mut">無</span>';
     $('#w-fear').innerHTML = (L.top_fear || []).map(([w, n]) => `<span>${esc(w)}<b>${n}</b></span>`).join('') || '<span class="mut">無</span>';
-    $('#hot').innerHTML = (L.hot || []).map((h) => `<li><a href="${esc(h.u)}" target="_blank" rel="noopener">${esc(h.t)}</a><span class="pb">推 ${h.push} · 噓 ${h.boo}</span></li>`).join('');
+    // PTTweb keeps copies of PTT posts; offer it as a backup when ptt.cc is down
+    const mirror = (u) => String(u).replace('https://www.ptt.cc/bbs/', 'https://www.pttweb.cc/bbs/').replace(/\.html$/, '');
+    $('#hot').innerHTML = (L.hot || []).map((h) => `<li><a href="${esc(h.u)}" target="_blank" rel="noopener">${esc(h.t)}</a><span class="pb">推 ${h.push} · 噓 ${h.boo} · <a class="alt" href="${esc(mirror(h.u))}" target="_blank" rel="noopener">備用連結</a></span></li>`).join('');
     const names = Object.fromEntries(DATA.screener.rows.map((r) => [r.code, r.name]));
     Object.values(DATA.chips).forEach((c) => { names[c.code] = c.name; });
     const st = Object.entries(L.stocks || {});
@@ -786,7 +789,7 @@ html.unlocked .gate { display: none; }
       <td><a class="code" href="https://tw.stock.yahoo.com/quote/${code}" target="_blank" rel="noopener">${code}</a></td>
       <td>${esc(names[code] || '')}</td><td class="r">${s.n}</td><td class="r up">${s.push}</td><td class="r down">${s.boo}</td>
       <td class="r">${s.idx == null ? '—' : fmt(s.idx, 0)}</td>
-      <td style="white-space:normal;min-width:240px">${s.titles.map((t) => `<a href="${esc(t.u)}" target="_blank" rel="noopener">${esc(t.t)}</a>`).join('<br>')}</td></tr>`).join('')
+      <td style="white-space:normal;min-width:240px">${s.titles.map((t) => `<a href="${esc(t.u)}" target="_blank" rel="noopener">${esc(t.t)}</a> <a class="alt" href="${esc(mirror(t.u))}" target="_blank" rel="noopener">備用</a>`).join('<br>')}</td></tr>`).join('')
       : '<tr><td colspan="7" class="empty">今天沒有標題帶股票代號的文章</td></tr>';
     drawSentChart();
   }

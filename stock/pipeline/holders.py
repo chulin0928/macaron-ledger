@@ -159,7 +159,8 @@ def update(data_dir, codes, load_json, save_json, log, weeks_back=26, foreign_da
                 rec["foreign"].update(finmind_foreign(code, since))
             except Exception as e:  # noqa: BLE001
                 fm_ok = False
-                log.append(f"外資持股比例在 {code} 停止更新（{e}），下次再補。")
+                log.append("外資持股比例今天已達 FinMind 免費查詢上限，部分個股顯示前一天的數字，下次更新會自動補上。")
+                print("FinMind:", code, e)
         rec["tdcc"] = dict(sorted(rec["tdcc"].items())[-60:])
         rec["foreign"] = dict(sorted(rec["foreign"].items())[-260:])
         save_json(p, rec)
