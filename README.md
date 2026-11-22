@@ -80,18 +80,28 @@ After a change that users must re-fetch (e.g. new JS files), bump `CACHE` in
 ## The family password
 
 The app can show a soft "family password" gate on first open. It is **not real
-security** — the password's hash ships in the page and all data is unencrypted in
-the browser — it just keeps a borrowed phone from casually opening the ledger.
+security** — the default hash ships in the page and all data is unencrypted in the
+browser — it just keeps a borrowed phone from casually opening the ledger.
 
-Everything lives in `js/gate.js`:
+**The easy way — in the app:** Settings → 家庭密碼 → **修改家庭密碼** (or **設定
+家庭密碼** if it's off). You can also **移除密碼鎖** (turn it off) or **回復預設
+密碼**. These are stored **per device** in `localStorage`
+(`macaron.gate.override.v1`), so changing the password in the app changes it on
+that device only; other devices keep using the source default until they're set
+too. No code or deploy needed.
 
-- **Change the password:** open the app, run this in the browser console, and
-  paste the 64-character result into `FAMILY_CODE_HASH`:
+**The shared default — in the source:** to change the password for *every* device
+and every fresh install, edit `FAMILY_CODE_HASH` in `js/gate.js`:
+
+- **Compute a hash:** open the app and run in the browser console, then paste the
+  64-character result into `FAMILY_CODE_HASH`:
   ```js
   const m = await import('./js/gate.js');
   console.log(await m.sha256Hex(m.normalizeCode('your-new-password')));
   ```
-- **Disable the gate entirely:** set `FAMILY_CODE_HASH = ''` in `js/gate.js`.
+- **Disable the gate by default:** set `FAMILY_CODE_HASH = ''` in `js/gate.js`.
+
+A device override always wins over the source default.
 
 ## Deploying
 

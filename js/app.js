@@ -27,7 +27,8 @@ import {
   el, clear, macaron, button, card, haptic, confirmDialog,
 } from './ui.js';
 import {
-  gateEnabled, checkCode, isUnlocked, rememberUnlock, forgetUnlock,
+  gateEnabled, hasOverride, checkCode, isUnlocked, rememberUnlock, forgetUnlock,
+  setPassword, disablePassword, resetToDefault,
 } from './gate.js';
 
 export const APP_VERSION = '2.0.0-web';
@@ -417,14 +418,8 @@ function renderSettings() {
     button('清除所有資料', { variant: 'danger', icon: 'cut', onClick: doClearAll }),
   ]));
 
-  // family password (only if a gate hash is configured)
-  if (gateEnabled()) {
-    wrap.append(card([
-      el('div.heading', { text: '家庭密碼' }),
-      el('div.muted.small', { text: '這台裝置已解鎖。把手機借給別人前可以先上鎖，資料會保留。' }),
-      button('鎖定這台裝置', { variant: 'secondary', icon: 'key', onClick: () => { forgetUnlock(); location.reload(); } }),
-    ]));
-  }
+  // family password
+  wrap.append(renderPasswordCard());
 
   // links + version
   wrap.append(card([
@@ -435,6 +430,80 @@ function renderSettings() {
     el('div.muted.small.center', { text: `馬卡龍記帳 Macaron Ledger v${APP_VERSION}` }),
   ]));
   return wrap;
+}
+
+function renderPasswordCard() {
+  const on = gateEnabled();
+  const children = [
+    el('div.heading', { text: '家庭密碼' }),
+    el('div.muted.small', {
+      text: on
+        ? '開 App 前要先輸入密碼。密碼存在這台裝置，改密碼只會影響這台裝置；其他家人的裝置要各自設定一樣的密碼。'
+        : '這台裝置目前不需要密碼就能打開。可以設一組家庭密碼，借手機給別人前先上鎖。',
+    }),
+  ];
+  if (on) {
+    children.push(el('div.btn-row', {}, [
+      button('修改家庭密碼', { variant: 'secondary', icon: 'key', onClick: () => openPasswordForm(false) }),
+      button('鎖定這台裝置', { variant: 'secondary', icon: 'shield', onClick: () => { forgetUnlock(); location.reload(); } }),
+    ]));
+    children.push(button('移除密碼鎖', {
+      variant: 'danger', icon: 'cut',
+      onClick: () => {
+        if (!confirmDialog('移除後，這台裝置開 App 就不用輸入密碼了。資料不會刪除。確定嗎？')) return;
+        disablePassword();
+        rerender();
+      },
+    }));
+  } else {
+    children.push(button('設定家庭密碼', { variant: 'secondary', icon: 'key', onClick: () => openPasswordForm(true) }));
+  }
+  if (hasOverride()) {
+    children.push(el('div.muted.small', { text: '目前使用這台裝置自己設定的密碼。' }));
+    children.push(button('回復預設密碼', {
+      variant: 'secondary', icon: 'time',
+      onClick: () => {
+        if (!confirmDialog('要改回原本程式內建的家庭密碼嗎？這台裝置自訂的密碼會取消。')) return;
+        resetToDefault();
+        rerender();
+      },
+    }));
+  }
+  return card(children);
+}
+
+function openPasswordForm(enabling) {
+  openModal((sheet, close) => {
+    sheet.append(el('div.sheet-head', {}, [
+      el('button.sheet-back', { type: 'button', text: '取消', onclick: close }),
+      el('div.sheet-title', { text: enabling ? '設定家庭密碼' : '修改家庭密碼' }),
+      el('span', { style: { width: '44px' } }),
+    ]));
+    const body = el('div.sheet-body');
+    body.append(el('div.muted.small', { text: '密碼不分大小寫，前後空白會自動忽略。設定後這台裝置會保持解鎖，其他裝置下次打開要輸入新密碼。' }));
+
+    const pw1 = el('input.text-input', { type: 'password', placeholder: '新密碼', autocomplete: 'new-password' });
+    const pw2 = el('input.text-input', { type: 'password', placeholder: '再輸入一次', autocomplete: 'new-password' });
+    const err = el('div.gate-err');
+    body.append(el('div.field', {}, [el('label.field-label', { text: '新密碼' }), pw1]));
+    body.append(el('div.field', {}, [el('label.field-label', { text: '確認密碼' }), pw2]));
+    body.append(err);
+    sheet.append(body);
+
+    const save = async () => {
+      err.textContent = '';
+      const a = pw1.value.trim();
+      const b = pw2.value.trim();
+      if (!a) { err.textContent = '請輸入密碼。'; pw1.focus(); return; }
+      if (a !== b) { err.textContent = '兩次輸入的密碼不一樣。'; pw2.focus(); return; }
+      await setPassword(a);
+      close();
+      rerender();
+    };
+    pw2.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); });
+    sheet.append(el('div.sheet-foot', {}, [button('儲存', { onClick: save })]));
+    setTimeout(() => pw1.focus(), 50);
+  });
 }
 
 function toggle(on, onChange) {
