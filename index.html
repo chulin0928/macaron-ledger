@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, shrink-to-fit=no" />
-    <title>馬卡龍記帳 Macaron Ledger</title>
+    <title>Macaron Ledger</title>
     <meta name="description" content="A sweet, simple expense tracker. Private, offline, and every category is a macaron." />
     <meta name="theme-color" content="#FFF9F2" />
     <meta name="color-scheme" content="light" />
@@ -18,16 +18,28 @@
     <meta property="og:title" content="Macaron Ledger" />
     <meta property="og:description" content="A sweet, simple expense tracker. Private, offline, and every category is a macaron." />
     <meta property="og:image" content="icons/og-image.png" />
-    <link rel="stylesheet" href="app.css" />
-  </head>
+    <style id="expo-reset">
+      html, body { height: 100%; background: #FFF9F2; }
+      body { overflow: hidden; margin: 0; -webkit-font-smoothing: antialiased; }
+      #root { display: flex; height: 100%; flex: 1; }
+      /* Center the app like a phone on wide screens */
+      @media (min-width: 720px) {
+        body { background: #FBF3E4; }
+        #root { max-width: 480px; margin: 0 auto; box-shadow: 0 0 0 1px #EFE4D6, 0 24px 60px rgba(138, 94, 66, 0.12); background: #FFF9F2; }
+      }
+      input, textarea { font-family: inherit; }
+      input:focus { outline: none; }
+    </style>
+  <meta name="theme-color" content="#FFF9F2">
+<link rel="icon" href="/macaron-ledger/favicon.ico"/></head>
   <body>
-    <noscript>馬卡龍記帳需要開啟 JavaScript 才能使用。</noscript>
+    <noscript>Macaron Ledger needs JavaScript to run.</noscript>
     <div id="root"></div>
-    <script type="module" src="js/boot.js"></script>
     <script>
       if ('serviceWorker' in navigator && location.protocol === 'https:') {
         addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
       }
     </script>
-  </body>
+  <script src="/macaron-ledger/_expo/static/js/web/index-7d4d98b5275761434d0e9025923af11a.js" defer></script>
+</body>
 </html>

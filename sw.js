@@ -1,41 +1,11 @@
-// Minimal offline support. index.html is network-first so a new deploy shows up
-// on the next online visit; everything else (CSS, JS modules, icons) is cached on
-// first use. Bump CACHE whenever you want to force clients to re-fetch.
-const CACHE = 'macaron-ledger-v2';
-const PRECACHE = [
-  './',
-  'index.html',
-  'app.css',
-  'js/boot.js',
-  'js/app.js',
-  'js/data.js',
-  'js/store.js',
-  'js/money.js',
-  'js/dates.js',
-  'js/categories.js',
-  'js/analytics.js',
-  'js/charts.js',
-  'js/csv.js',
-  'js/backup.js',
-  'js/ui.js',
-  'js/gate.js',
-  'manifest.webmanifest',
-];
+// Minimal offline support: everything the app fetches from its own origin is cached on first use.
+// index.html is network-first so a new deploy shows up on the next online visit; hashed
+// bundles and fonts are cache-first because their names change when their content does.
+const CACHE = 'macaron-ledger-v1';
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE)
-      .then((c) => c.addAll(PRECACHE).catch(() => {}))
-      .then(() => self.skipWaiting()),
-  );
-});
-
+self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim()),
-  );
+  event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
 });
 
 self.addEventListener('fetch', (event) => {
