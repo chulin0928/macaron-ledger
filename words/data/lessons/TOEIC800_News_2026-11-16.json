@@ -1,0 +1,598 @@
+{
+ "title": "TOEIC 800 Daily News Reading",
+ "subtitle": "每日英語新聞閱讀與字彙精讀",
+ "date": "2026-11-16",
+ "articles": [
+  {
+   "n": 1,
+   "category": "World Affairs 國際政治",
+   "title": "Trump, Xi and Putin to Hold First Three-Way Summit in Shenzhen",
+   "source": "dpa (via Yahoo News)",
+   "url": "https://www.yahoo.com/news/politics/articles/historic-meeting-trump-xi-putin-170317497.html",
+   "body": [
+    "The leaders of the United States, China and Russia are set to sit down together for the first time, in a trilateral meeting that diplomats are already describing as historic. Both the White House and the Kremlin confirmed over the weekend that Donald Trump, Xi Jinping and Vladimir Putin will meet on 19 November in Shenzhen, on the sidelines of the Asia-Pacific Economic Cooperation (APEC) summit, which China is hosting this year. Kremlin spokesman Dmitry Peskov told state media that the arrangements had been finalised, and Beijing later confirmed that Xi would receive both presidents.",
+    "According to officials in Washington, the centrepiece of the agenda is nuclear arms control. The New START treaty, which for more than a decade capped the strategic arsenals of the United States and Russia, has expired, and Mr Trump has proposed a new framework that would, for the first time, bring China to the negotiating table. A senior US official nevertheless sought to lower expectations, characterising the encounter as “a first step” rather than a venue for concrete commitments.",
+    "The war in Ukraine is also expected to feature prominently. Russian and Ukrainian delegations met in Abu Dhabi earlier this month under American mediation, their first direct contact in more than eight months, and Washington has long urged Beijing to use its considerable economic leverage over Moscow to help bring the conflict to an end. Ukraine’s government, however, has warned against any settlement negotiated without its participation, and several European leaders have voiced reservations about a format that excludes them altogether.",
+    "Reactions elsewhere have been more favourable. Australian Prime Minister Anthony Albanese endorsed the summit, arguing that dialogue among the three largest powers is preferable to confrontation. Analysts note that the meeting carries considerable symbolic weight for China, which gains the prestige of hosting the two other leaders on its own soil during a week when the global spotlight is already on Shenzhen.",
+    "Whether the talks yield substance or merely a photograph remains to be seen. Observers caution that the three governments hold sharply divergent positions on trade, Taiwan and the Middle East, and that a single meeting is unlikely to bridge those gaps. Still, the mere fact that it is taking place marks a notable departure from the diplomatic estrangement of recent years."
+   ],
+   "summary": "美中俄三國領袖將於11月19日在深圳APEC峰會期間舉行首次三方會談，白宮與克里姆林宮均已確認。議程以核武軍控為核心，烏克蘭戰爭亦在討論之列；歐洲各國與烏克蘭對被排除在外表示疑慮，澳洲總理則公開表示支持。",
+   "vocab": [
+    {
+     "word": "trilateral",
+     "key": "trilateral",
+     "star": false,
+     "ipa": "/traɪˈlætərəl/",
+     "pos": "adj.",
+     "zh": "三方的",
+     "colloc": "trilateral talks",
+     "example": "The three countries signed a trilateral trade agreement last spring."
+    },
+    {
+     "word": "on the sidelines of",
+     "key": "on the sidelines of",
+     "star": false,
+     "ipa": "/ɒn ðə ˈsaɪdlaɪnz əv/",
+     "pos": "phr.",
+     "zh": "在…期間（會外、場邊）",
+     "colloc": "on the sidelines of the summit",
+     "example": "The two ministers met briefly on the sidelines of the conference."
+    },
+    {
+     "word": "finalise (finalize)",
+     "key": "finalise",
+     "star": true,
+     "ipa": "/ˈfaɪnəlaɪz/",
+     "pos": "v.",
+     "zh": "敲定、定案",
+     "colloc": "finalise the details",
+     "example": "We need to finalise the contract before Friday."
+    },
+    {
+     "word": "centrepiece",
+     "key": "centrepiece",
+     "star": false,
+     "ipa": "/ˈsentəpiːs/",
+     "pos": "n.",
+     "zh": "核心、最重要的部分",
+     "colloc": "the centrepiece of the plan",
+     "example": "The new product will be the centrepiece of our marketing campaign."
+    },
+    {
+     "word": "expire",
+     "key": "expire",
+     "star": true,
+     "ipa": "/ɪkˈspaɪə/",
+     "pos": "v.",
+     "zh": "到期、失效",
+     "colloc": "the contract expires",
+     "example": "Your membership expires at the end of the month."
+    },
+    {
+     "word": "leverage",
+     "key": "leverage",
+     "star": true,
+     "ipa": "/ˈliːvərɪdʒ/",
+     "pos": "n.",
+     "zh": "影響力、籌碼",
+     "colloc": "economic leverage",
+     "example": "The company used its market leverage to negotiate lower prices."
+    },
+    {
+     "word": "mediation",
+     "key": "mediation",
+     "star": false,
+     "ipa": "/ˌmiːdiˈeɪʃn/",
+     "pos": "n.",
+     "zh": "調解、斡旋",
+     "colloc": "under (US) mediation",
+     "example": "The dispute was resolved through mediation rather than in court."
+    },
+    {
+     "word": "reservation",
+     "key": "reservation",
+     "star": true,
+     "ipa": "/ˌrezəˈveɪʃn/",
+     "pos": "n.",
+     "zh": "保留意見、疑慮",
+     "colloc": "express reservations about",
+     "example": "Several board members expressed reservations about the merger."
+    },
+    {
+     "word": "endorse",
+     "key": "endorse",
+     "star": true,
+     "ipa": "/ɪnˈdɔːs/",
+     "pos": "v.",
+     "zh": "支持、認可",
+     "colloc": "endorse a proposal",
+     "example": "The committee endorsed the new safety guidelines."
+    },
+    {
+     "word": "divergent",
+     "key": "divergent",
+     "star": false,
+     "ipa": "/daɪˈvɜːdʒənt/",
+     "pos": "adj.",
+     "zh": "分歧的、不同的",
+     "colloc": "divergent views",
+     "example": "The two consultants offered divergent opinions on the project."
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "category": "Business & Economy 商業經濟",
+   "title": "Asian Markets Slip as Investors Brace for Nvidia Earnings and a Fed Rate Hike",
+   "source": "Reuters (via Investing.com)",
+   "url": "https://www.investing.com/news/economy-news/asian-shares-fall-before-nvidia-earnings-anthropic-ipo-test-tech-rally-5028293",
+   "body": [
+    "Asian equities opened the week on a cautious note on Monday as investors braced for a run of events that could determine whether the long rally in technology shares has further to go. Japan’s Nikkei fell 0.6 per cent, South Korea’s KOSPI slipped 0.2 per cent, and MSCI’s broadest index of Asia-Pacific shares outside Japan edged down 0.1 per cent. US stock futures, by contrast, pointed modestly higher.",
+    "The week’s pivotal moment arrives on Tuesday, when chipmaker Nvidia reports quarterly results. Analysts anticipate revenue of roughly US$109 billion and earnings growth of around 90 per cent, figures that would ordinarily be cause for celebration. Yet the company is in turmoil following the abrupt departure of its long-serving chief executive, Jensen Huang, which has wiped almost US$2 trillion off its market value since early October. The Financial Times reported that Mr Huang has discussed a possible comeback with confidants, while US Treasury Secretary Scott Bessent suggested the board should look outside the company for a successor. Options markets imply a share-price swing of about 7 per cent in either direction on the day, and one strategist openly questioned whether the quarterly figures would carry their usual significance given the leadership uncertainty.",
+    "Two days later, Anthropic, the developer of the Claude chatbot, is scheduled to begin trading after what sources describe as one of the most heavily subscribed initial public offerings in years. Its debut will serve as a real-time gauge of appetite for artificial-intelligence assets.",
+    "Monetary policy adds a further layer of complexity. Although producer prices rose slightly less than forecast in October, a hotter-than-expected consumer price report suggested that inflationary pressure is broadening. Futures markets now treat a quarter-point interest-rate increase at the Federal Reserve’s December meeting as a near certainty, and price in roughly 90 basis points of tightening by late next year. Treasury yields, which recorded their steepest weekly rise since April 2025, held steady, with the ten-year note above 5 per cent.",
+    "In currency and commodity markets, the dollar index hovered near its highest level in more than a year, Brent crude eased to around US$95.69 a barrel, and gold recovered slightly to US$3,891 an ounce after a sharp fall the previous week. With the minutes of the Fed’s October meeting also due on Wednesday, traders are unlikely to enjoy a quiet week."
+   ],
+   "summary": "亞股週一開盤走軟，投資人靜待本週多項重大事件：輝達週二公布財報，但執行長黃仁勳突然離職已使市值蒸發近2兆美元；Anthropic週四掛牌上市，將成為AI資產人氣的即時指標。通膨數據偏熱，市場幾乎篤定聯準會12月將升息一碼。",
+   "vocab": [
+    {
+     "word": "brace for",
+     "key": "brace for",
+     "star": false,
+     "ipa": "/breɪs fɔː/",
+     "pos": "phr. v.",
+     "zh": "為（困難）做好準備",
+     "colloc": "brace for impact",
+     "example": "Retailers are bracing for a slow holiday season."
+    },
+    {
+     "word": "pivotal",
+     "key": "pivotal",
+     "star": false,
+     "ipa": "/ˈpɪvətl/",
+     "pos": "adj.",
+     "zh": "關鍵的、樞紐的",
+     "colloc": "a pivotal role",
+     "example": "She played a pivotal role in the company’s turnaround."
+    },
+    {
+     "word": "anticipate",
+     "key": "anticipate",
+     "star": true,
+     "ipa": "/ænˈtɪsɪpeɪt/",
+     "pos": "v.",
+     "zh": "預期、預料",
+     "colloc": "anticipate demand",
+     "example": "We anticipate strong demand for the new model."
+    },
+    {
+     "word": "turmoil",
+     "key": "turmoil",
+     "star": false,
+     "ipa": "/ˈtɜːmɔɪl/",
+     "pos": "n.",
+     "zh": "動盪、混亂",
+     "colloc": "political turmoil",
+     "example": "The sudden resignation threw the department into turmoil."
+    },
+    {
+     "word": "abrupt",
+     "key": "abrupt",
+     "star": false,
+     "ipa": "/əˈbrʌpt/",
+     "pos": "adj.",
+     "zh": "突然的、唐突的",
+     "colloc": "an abrupt change",
+     "example": "The meeting came to an abrupt end when the fire alarm sounded."
+    },
+    {
+     "word": "successor",
+     "key": "successor",
+     "star": true,
+     "ipa": "/səkˈsesə/",
+     "pos": "n.",
+     "zh": "繼任者、接班人",
+     "colloc": "appoint a successor",
+     "example": "The CEO has not yet named a successor."
+    },
+    {
+     "word": "initial public offering (IPO)",
+     "key": "initial public offering",
+     "star": true,
+     "ipa": "/ɪˌnɪʃl ˈpʌblɪk ˈɒfərɪŋ/",
+     "pos": "n.",
+     "zh": "首次公開發行（上市）",
+     "colloc": "launch an IPO",
+     "example": "The start-up is planning an initial public offering next year."
+    },
+    {
+     "word": "gauge",
+     "key": "gauge",
+     "star": false,
+     "ipa": "/ɡeɪdʒ/",
+     "pos": "n. / v.",
+     "zh": "指標；衡量",
+     "colloc": "a gauge of confidence",
+     "example": "Customer surveys are a useful gauge of satisfaction."
+    },
+    {
+     "word": "monetary policy",
+     "key": "monetary policy",
+     "star": true,
+     "ipa": "/ˈmʌnɪtri ˈpɒləsi/",
+     "pos": "n.",
+     "zh": "貨幣政策",
+     "colloc": "tighten monetary policy",
+     "example": "The central bank loosened monetary policy to support growth."
+    },
+    {
+     "word": "hover",
+     "key": "hover",
+     "star": false,
+     "ipa": "/ˈhɒvə/",
+     "pos": "v.",
+     "zh": "徘徊、盤旋（在某水準附近）",
+     "colloc": "hover around / near",
+     "example": "Unemployment has hovered around 4 per cent all year."
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "category": "Science & Space 科學太空",
+   "title": "“Now Everything Changes”: SpaceX Catches a Starship Returning from Orbit",
+   "source": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news/2026/11/15/almost-magic-as-spacex-craft-caught-mid-air-why-it-matters",
+   "body": [
+    "On a cloudy Saturday afternoon in south Texas, a 50-metre-tall spacecraft descended tail-first from the sky, fired its engines to slow to a hover, and was clasped in mid-air by a pair of giant mechanical arms attached to its launch tower. With that manoeuvre, SpaceX accomplished something no organisation had ever done: the recovery, intact and upright, of a rocket’s upper stage after a journey to orbit.",
+    "The vehicle, known as Ship 42, had lifted off from the company’s Starbase facility roughly 22 hours earlier on the fifteenth test flight of the Starship programme. It circled the Earth fourteen times before re-entering the atmosphere and steering itself back to the exact spot from which it departed. “We caught a Starship, and now everything changes,” declared SpaceX commentator Dan Huot during the live broadcast. NASA Administrator Jared Isaacman described the moment as “almost magic”.",
+    "The achievement was not without setbacks. The Super Heavy booster, the vehicle’s enormous first stage, malfunctioned on its way back and triggered an automated abort, exploding harmlessly over the ocean rather than being caught as planned. SpaceX has caught boosters on three previous occasions since October 2024, so the loss was a disappointment but hardly a mystery to engineers.",
+    "Why does the catch matter so much? The economics of spaceflight have long been dictated by the fact that rockets were discarded after a single use. SpaceX’s Falcon 9, whose first stage lands and flies again, has already slashed launch costs and has now flown more than 700 missions. A fully reusable Starship, in which both stages return to the pad within hours, could push costs down by another order of magnitude and allow launches to occur with the frequency of airline flights. Niharika Patel, an engineer at satellite company Loft Orbital, noted that such a system is indispensable for a sustained human presence on the Moon and, eventually, Mars.",
+    "The stakes are also institutional. NASA is paying SpaceX billions of dollars to develop a Starship variant that will land astronauts on the lunar surface later this decade. Every demonstration of precise re-entry and autonomous control brings that goal closer, and reassures the agency that its bet on a private contractor is paying off."
+   ],
+   "summary": "SpaceX於11月14日在德州星艦基地，首次以發射塔的機械臂在空中接住自軌道返回的星艦上段，創下航太史上首例。此次第15次試飛中，超重型助推器雖在返航時故障爆炸，但上段成功回收使火箭完全重複使用的目標大幅接近，對NASA登月計畫意義重大。",
+   "vocab": [
+    {
+     "word": "descend",
+     "key": "descend",
+     "star": false,
+     "ipa": "/dɪˈsend/",
+     "pos": "v.",
+     "zh": "下降、下來",
+     "colloc": "descend rapidly",
+     "example": "The elevator descended slowly to the ground floor."
+    },
+    {
+     "word": "accomplish",
+     "key": "accomplish",
+     "star": true,
+     "ipa": "/əˈkʌmplɪʃ/",
+     "pos": "v.",
+     "zh": "完成、達成",
+     "colloc": "accomplish a goal",
+     "example": "The team accomplished all its objectives ahead of schedule."
+    },
+    {
+     "word": "intact",
+     "key": "intact",
+     "star": false,
+     "ipa": "/ɪnˈtækt/",
+     "pos": "adj.",
+     "zh": "完好無損的",
+     "colloc": "remain intact",
+     "example": "Despite the storm, the roof remained intact."
+    },
+    {
+     "word": "setback",
+     "key": "setback",
+     "star": true,
+     "ipa": "/ˈsetbæk/",
+     "pos": "n.",
+     "zh": "挫折、阻礙",
+     "colloc": "suffer a setback",
+     "example": "The project suffered a major setback when funding was cut."
+    },
+    {
+     "word": "malfunction",
+     "key": "malfunction",
+     "star": false,
+     "ipa": "/ˌmælˈfʌŋkʃn/",
+     "pos": "v. / n.",
+     "zh": "故障、失靈",
+     "colloc": "equipment malfunction",
+     "example": "The printer malfunctioned twice during the presentation."
+    },
+    {
+     "word": "discard",
+     "key": "discard",
+     "star": false,
+     "ipa": "/dɪsˈkɑːd/",
+     "pos": "v.",
+     "zh": "丟棄、拋棄",
+     "colloc": "discard packaging",
+     "example": "Please discard any documents that are out of date."
+    },
+    {
+     "word": "slash",
+     "key": "slash",
+     "star": true,
+     "ipa": "/slæʃ/",
+     "pos": "v.",
+     "zh": "大幅削減",
+     "colloc": "slash prices / costs",
+     "example": "The airline slashed fares to attract more passengers."
+    },
+    {
+     "word": "order of magnitude",
+     "key": "order of magnitude",
+     "star": false,
+     "ipa": "/ˈɔːdər əv ˈmæɡnɪtjuːd/",
+     "pos": "n. phr.",
+     "zh": "數量級（約十倍）",
+     "colloc": "by an order of magnitude",
+     "example": "The new server is faster by an order of magnitude."
+    },
+    {
+     "word": "indispensable",
+     "key": "indispensable",
+     "star": true,
+     "ipa": "/ˌɪndɪˈspensəbl/",
+     "pos": "adj.",
+     "zh": "不可或缺的",
+     "colloc": "indispensable to",
+     "example": "A reliable supply chain is indispensable to any manufacturer."
+    },
+    {
+     "word": "variant",
+     "key": "variant",
+     "star": false,
+     "ipa": "/ˈveəriənt/",
+     "pos": "n.",
+     "zh": "變體、不同版本",
+     "colloc": "a new variant of",
+     "example": "The company released a cheaper variant of its flagship phone."
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "category": "Technology 科技",
+   "title": "Italy Fines Meta €805 Million over Facebook’s Access to Android Photo Galleries",
+   "source": "AP (via ABC News)",
+   "url": "https://abcnews.com/Technology/wireStory/meta-fined-887-million-italy-android-gallery-photos-138145127",
+   "body": [
+    "Italy’s data protection authority has imposed a fine of €805 million (about US$887 million) on Meta, concluding that the company’s Facebook app accessed the photos and videos stored on users’ Android phones without their free and informed consent. The penalty, announced on Friday, is one of the largest ever levied by a national regulator in Europe and affects an estimated 20 million users in Italy alone.",
+    "At the heart of the case is a feature labelled “Get suggestions from gallery when browsing Facebook”. Investigators found that it was switched on by default, meaning that users who never actively chose it were nonetheless having the contents of their galleries scanned so that the app could propose material to share. The regulator also objected to the way permission had been obtained: Facebook requested access to the gallery through a single prompt that bundled together several functions with quite different purposes, leaving users unable to distinguish what they were agreeing to. No specific explanation of the suggestion feature was provided.",
+    "The authority grounded its decision in European privacy rules, incorporated into Italian law, which treat a smartphone as part of an individual’s private sphere and therefore require explicit consent before any outside party may examine its contents. In calculating the fine, officials cited Meta’s “lack of cooperation” during the inquiry as an aggravating factor. The sum amounts to roughly 0.47 per cent of the company’s global turnover.",
+    "Meta Platforms Ireland, the entity formally responsible for European users, disputed the Italian regulator’s jurisdiction, arguing that oversight should rest with authorities in Ireland, where its European headquarters is located. Meta did not immediately comment on the ruling itself, but a legal challenge appears likely.",
+    "Beyond the financial penalty, the regulator ordered the company to disable the feature within 60 days and to obtain separate, dedicated consent from any user who wishes to switch it back on. Privacy advocates welcomed the decision as a signal that default settings cannot be used to circumvent consent requirements, while industry observers noted that it adds to a growing list of European enforcement actions against large technology platforms. For Meta, which already faces scrutiny under the EU’s Digital Markets Act, the ruling is another reminder that its data practices remain under a microscope."
+   ],
+   "summary": "義大利個資保護機關對Meta開罰8.05億歐元，指Facebook的Android版App預設開啟「相簿建議」功能，未經使用者自由且知情的同意便存取其照片與影片，影響約2,000萬名義大利用戶。Meta愛爾蘭公司質疑義國的管轄權；監管機關要求60日內停用該功能，並須另行取得使用者同意。",
+   "vocab": [
+    {
+     "word": "impose",
+     "key": "impose",
+     "star": true,
+     "ipa": "/ɪmˈpəʊz/",
+     "pos": "v.",
+     "zh": "施加、課徵（罰款、稅）",
+     "colloc": "impose a fine / tax",
+     "example": "The city imposed new parking restrictions downtown."
+    },
+    {
+     "word": "consent",
+     "key": "consent",
+     "star": true,
+     "ipa": "/kənˈsent/",
+     "pos": "n.",
+     "zh": "同意、允許",
+     "colloc": "informed consent",
+     "example": "Patients must give written consent before the procedure."
+    },
+    {
+     "word": "levy",
+     "key": "levy",
+     "star": false,
+     "ipa": "/ˈlevi/",
+     "pos": "v.",
+     "zh": "徵收、課徵",
+     "colloc": "levy a tax on",
+     "example": "The government plans to levy a charge on plastic bags."
+    },
+    {
+     "word": "by default",
+     "key": "by default",
+     "star": false,
+     "ipa": "/baɪ dɪˈfɔːlt/",
+     "pos": "phr.",
+     "zh": "預設地、自動地",
+     "colloc": "enabled by default",
+     "example": "Notifications are turned on by default when you install the app."
+    },
+    {
+     "word": "bundle",
+     "key": "bundle",
+     "star": false,
+     "ipa": "/ˈbʌndl/",
+     "pos": "v.",
+     "zh": "捆綁、打包（銷售）",
+     "colloc": "bundle services together",
+     "example": "The provider bundles internet and TV into one monthly plan."
+    },
+    {
+     "word": "aggravating",
+     "key": "aggravating",
+     "star": false,
+     "ipa": "/ˈæɡrəveɪtɪŋ/",
+     "pos": "adj.",
+     "zh": "加重（情節）的",
+     "colloc": "aggravating factor",
+     "example": "The judge considered the repeat offence an aggravating factor."
+    },
+    {
+     "word": "turnover",
+     "key": "turnover",
+     "star": true,
+     "ipa": "/ˈtɜːnəʊvə/",
+     "pos": "n.",
+     "zh": "營業額；人員流動率",
+     "colloc": "annual turnover",
+     "example": "The firm’s turnover exceeded £50 million last year."
+    },
+    {
+     "word": "jurisdiction",
+     "key": "jurisdiction",
+     "star": false,
+     "ipa": "/ˌdʒʊərɪsˈdɪkʃn/",
+     "pos": "n.",
+     "zh": "管轄權",
+     "colloc": "fall under the jurisdiction of",
+     "example": "The case falls under the jurisdiction of the federal court."
+    },
+    {
+     "word": "circumvent",
+     "key": "circumvent",
+     "star": false,
+     "ipa": "/ˌsɜːkəmˈvent/",
+     "pos": "v.",
+     "zh": "規避、繞過",
+     "colloc": "circumvent the rules",
+     "example": "Some companies tried to circumvent the regulations by relocating."
+    },
+    {
+     "word": "scrutiny",
+     "key": "scrutiny",
+     "star": true,
+     "ipa": "/ˈskruːtəni/",
+     "pos": "n.",
+     "zh": "審查、密切檢視",
+     "colloc": "come under scrutiny",
+     "example": "The budget proposal came under intense scrutiny from lawmakers."
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "category": "Environment 環境",
+   "title": "COP31 Reaches Halfway Point in Antalya with Finance Dispute Unresolved",
+   "source": "Climate Home News",
+   "url": "https://www.climatechangenews.com/2026/11/14/cop31-bulletin-day-6-limited-progress-as-ministers-arrive-in-antalya/",
+   "body": [
+    "The United Nations climate conference in Antalya, Türkiye, reached its midpoint over the weekend, with negotiators acknowledging that most of the hardest decisions remain ahead. COP31, which runs from 9 to 20 November, is operating under an unusual arrangement: Türkiye holds the presidency, while Australia’s Chris Bowen presides over the negotiations themselves. Mr Bowen said the co-presidency had worked “exceedingly well” and could serve as a template for future summits.",
+    "Outside the venue, thousands of Turkish and international campaigners marched through the rain-soaked city on Saturday, chanting “no more blah blah blah, climate justice now”. Their demands ranged from an end to fossil fuels to compensation for loss and damage in vulnerable countries, but one issue dominated. “Our main demand is about finance,” said Tasneem Essop of Climate Action Network, who criticised the European Union for arriving without any new funding commitments.",
+    "Inside, the finance question is equally contentious. A draft text on the global goal on adaptation endorses African countries’ call to triple adaptation finance to at least US$120 billion a year by 2035. However, an alternative option would instead launch a review of the target’s baseline and scope, a proposal that developing nations are expected to resist, fearing it would postpone real money indefinitely.",
+    "Fossil-fuel language remains heavily bracketed, the diplomatic shorthand for text on which countries have yet to agree. The EU wants the Mitigation Work Programme extended well into the next decade, and there is debate over whether a voluntary roadmap for moving away from fossil fuels, championed by Brazil, should be formally welcomed in the final cover decision. Several large developing economies have also pushed back against sectoral targets, including a voluntary pledge to raise electrification to 35 per cent of energy use by 2035.",
+    "UN climate chief Simon Stiell characterised progress so far as “constructive” but urged governments “to move swiftly to the hardest issues and to avoid tactical delays”. With ministers now arriving to take over the most sensitive files, a first draft of the cover decision is expected early this week. Meanwhile, a group of countries including Mexico, South Korea and Switzerland has floated a structural reform: holding the conference every two years rather than annually, on the grounds that the current cycle leaves too little time for implementation between summits."
+   ],
+   "summary": "在土耳其安塔利亞舉行的COP31氣候大會進入下半場，資金議題仍是最大分歧：非洲國家要求在2035年前將調適資金增至每年至少1,200億美元，但另一方案主張先檢討目標基準。化石燃料相關文字仍充滿爭議，數千名示威者週六上街要求氣候正義；部長級官員本週接手最棘手的談判。",
+   "vocab": [
+    {
+     "word": "acknowledge",
+     "key": "acknowledge",
+     "star": true,
+     "ipa": "/əkˈnɒlɪdʒ/",
+     "pos": "v.",
+     "zh": "承認；確認收到",
+     "colloc": "acknowledge receipt of",
+     "example": "The manager acknowledged that the deadline was unrealistic."
+    },
+    {
+     "word": "preside over",
+     "key": "preside over",
+     "star": false,
+     "ipa": "/prɪˈzaɪd ˈəʊvə/",
+     "pos": "phr. v.",
+     "zh": "主持、主導",
+     "colloc": "preside over a meeting",
+     "example": "The deputy chair will preside over tomorrow’s session."
+    },
+    {
+     "word": "template",
+     "key": "template",
+     "star": true,
+     "ipa": "/ˈtempleɪt/",
+     "pos": "n.",
+     "zh": "範本、模板",
+     "colloc": "serve as a template",
+     "example": "Use this template when drafting your proposal."
+    },
+    {
+     "word": "compensation",
+     "key": "compensation",
+     "star": true,
+     "ipa": "/ˌkɒmpenˈseɪʃn/",
+     "pos": "n.",
+     "zh": "補償、賠償",
+     "colloc": "claim compensation",
+     "example": "Passengers received compensation for the cancelled flight."
+    },
+    {
+     "word": "contentious",
+     "key": "contentious",
+     "star": false,
+     "ipa": "/kənˈtenʃəs/",
+     "pos": "adj.",
+     "zh": "爭議性的",
+     "colloc": "a contentious issue",
+     "example": "Parking fees remain a contentious issue among staff."
+    },
+    {
+     "word": "baseline",
+     "key": "baseline",
+     "star": false,
+     "ipa": "/ˈbeɪslaɪn/",
+     "pos": "n.",
+     "zh": "基準線、基線",
+     "colloc": "establish a baseline",
+     "example": "Researchers measured a baseline before the treatment began."
+    },
+    {
+     "word": "postpone",
+     "key": "postpone",
+     "star": true,
+     "ipa": "/pəˈspəʊn/",
+     "pos": "v.",
+     "zh": "延後、推遲",
+     "colloc": "postpone a decision",
+     "example": "The launch was postponed until further notice."
+    },
+    {
+     "word": "champion",
+     "key": "champion",
+     "star": false,
+     "ipa": "/ˈtʃæmpiən/",
+     "pos": "v.",
+     "zh": "倡導、擁護",
+     "colloc": "champion a cause",
+     "example": "She has long championed flexible working arrangements."
+    },
+    {
+     "word": "pledge",
+     "key": "pledge",
+     "star": true,
+     "ipa": "/pledʒ/",
+     "pos": "n. / v.",
+     "zh": "承諾、保證",
+     "colloc": "make a pledge",
+     "example": "The firm pledged to cut emissions by half within a decade."
+    },
+    {
+     "word": "implementation",
+     "key": "implementation",
+     "star": true,
+     "ipa": "/ˌɪmplɪmenˈteɪʃn/",
+     "pos": "n.",
+     "zh": "實施、執行",
+     "colloc": "implementation of a policy",
+     "example": "The implementation of the new system will take six months."
+    }
+   ]
+  }
+ ],
+ "grammar": [],
+ "notes": [],
+ "id": "TOEIC800_News_2026-11-16",
+ "file": "TOEIC800_News_2026-11-16.docx",
+ "driveId": "1L_EkF6s7z9dYXIKk-nE3nIDefGf_bvam",
+ "modified": "Nov 16"
+}
