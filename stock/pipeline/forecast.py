@@ -299,8 +299,8 @@ def backtest(days, ser, revenue):
     }
 
 
-def today(days, ser, revenue, names, ptt_stocks, model):
-    i = len(days) - 1
+def today(days, ser, revenue, names, ptt_stocks, model, i=None):
+    i = len(days) - 1 if i is None else i
     rev = revenue_available(revenue, date.fromisoformat(days[i]["date"]))
     rows = []
     for code, cols in ser.items():
@@ -354,3 +354,23 @@ def track(pred_dir, days, rows, save_json, load_json, model=None):
             "bear": {"n": stats["bear"][0], "win": _rate(stats["bear"][1], stats["bear"][0])},
             "top10": {"n": stats["top10"][0], "win": _rate(stats["top10"][1], stats["top10"][0])},
             "batches": batches[-20:], "first_pred": pending[0] if pending else None}
+
+
+def fill_missing_predictions(pred_dir, days, ser, revenue, names, model, save_json):
+    """Recreate prediction files for trading days after the first saved one that have none
+    (e.g. a run that could not save). Uses only data up to each day, so nothing is looked ahead."""
+    have = sorted(p.stem for p in pred_dir.glob("*.json"))
+    if not have:
+        return 0
+    made = 0
+    for i, d in enumerate(days[:-1]):
+        key = d["date"].replace("-", "")
+        if key <= have[0] or key in have:
+            continue
+        rows = today(days, ser, revenue, names, None, model, i)
+        save_json(pred_dir / f"{key}.json",
+                  {"date": d["date"], "model": model, "rebuilt": True,
+                   "calls": {r["code"]: [r["total"], r["call"], r["close"]] for r in rows if r["call"]},
+                   "top10": [r["code"] for r in rows[:10]]})
+        made += 1
+    return made

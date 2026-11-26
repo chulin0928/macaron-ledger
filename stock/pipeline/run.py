@@ -216,7 +216,8 @@ def main():
         "threshold": round(forecast.CALL * 100),
         "rows": fc_rows,
         "backtest": bt,
-        "live": forecast.track(DATA / "predictions", days, fc_rows, save_json, load_json, model),
+        "live": (forecast.fill_missing_predictions(DATA / "predictions", days, ser, rev_all, names, model, save_json),
+                 forecast.track(DATA / "predictions", days, fc_rows, save_json, load_json, model))[1],
     }
 
     for s in series:
