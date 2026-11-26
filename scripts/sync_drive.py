@@ -31,7 +31,7 @@ import urllib.request
 import zipfile
 from xml.etree import ElementTree as ET
 
-PARSER_VERSION = 3
+PARSER_VERSION = 7
 DEFAULT_FOLDER = "1AnZyk1rU7nAVAYhyqD-tm7ckiOsMWWwz"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "words", "data")
@@ -227,10 +227,10 @@ def word_key(w):
 def split_word_cell(cell, has_pos, has_ipa):
     text = clean(cell.replace("\n", " "))
     star = "★" in text
-    text = clean(text.replace("★", " "))
+    text = clean(re.sub(r"^\d+\s*[.)、]\s*", "", text.replace("★", " ")))
     ipa = pos = ""
     if has_ipa:
-        m = re.match(r"^(.*?)\s*(/[^/]+/)\s*(.*)$", text)
+        m = re.match(r"^(.*?)\s*(/[^/\s](?:[^/]*[^/\s])?/)\s*(.*)$", text)
         if m:
             text, ipa = clean(m.group(1) + " " + m.group(3)), m.group(2)
     if has_pos:
@@ -343,6 +343,11 @@ def parse_lesson(blocks, name, fallback_date):
 
         am = RE_ARTICLE.match(one_line)
         if am and (level or len(one_line) < 80):
+            same = [a for a in lesson["articles"] if a["n"] == int(am.group(1))]
+            if same:  # e.g. "ARTICLE 1 · WORLD AFFAIRS · VOCABULARY": more of the same article
+                art, gram = same[-1], None
+                mode = "vocab" if RE_VOCAB_HEAD.search(one_line) else "body"
+                continue
             art = {"n": int(am.group(1)), "category": clean(am.group(2) or ""), "title": "",
                    "source": "", "url": "", "body": [], "summary": "", "vocab": []}
             lesson["articles"].append(art)
